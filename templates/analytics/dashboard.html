@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>📊 Tableau de Bord (Admin)</h2>
+    
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Stagiaires Inscrits</div>
+                <div class="card-body">
+                    <h1 class="card-title">{{ nb_stagiaires }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Entreprises</div>
+                <div class="card-body">
+                    <h1 class="card-title">{{ nb_entreprises }}</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Conventions Signées</div>
+                <div class="card-body">
+                    <h1 class="card-title">{{ nb_conventions }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
