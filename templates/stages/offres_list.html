@@ -21,8 +21,9 @@
               <p class="text-muted mb-1"><strong>Entreprise:</strong> {{ offre.entreprise.nom }}</p>
               <p class="card-text">{{ offre.description|truncatechars:120 }}</p>
               <p class="small text-muted">{{ offre.date_debut }} → {{ offre.date_fin }}</p>
+              <a class="btn btn-primary" href="{% url 'stages:postuler' offre.id %}">Postuler</a>
 
-              <span class="btn btn-secondary disabled">Postuler (coming soon)</span>
+
             </div>
           </div>
         </div>
