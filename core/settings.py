@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+     "stages",
 
     # Apps ديالكم (زيدوهم من بعد)
     # "users",
