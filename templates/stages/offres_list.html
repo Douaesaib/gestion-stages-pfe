@@ -9,6 +9,16 @@
 <body class="bg-light">
 
 <div class="container py-4">
+  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
   <h1 class="mb-4">Offres disponibles</h1>
 
   {% if offres %}
