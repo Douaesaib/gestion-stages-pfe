@@ -21,7 +21,7 @@ class Offre(models.Model):
 
 
 class Candidature(models.Model):
-    nom_etudiant = models.CharField(max_length=150)
+    nom_stagiaire = models.CharField(max_length=150)
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
 
