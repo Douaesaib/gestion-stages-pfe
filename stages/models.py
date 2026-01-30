@@ -26,5 +26,13 @@ class Candidature(models.Model):
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["offre", "nom_stagiaire"],
+                name="unique_candidature_par_offre"
+            )
+        ]
+
     def __str__(self):
         return f"{self.nom_stagiaire} → {self.offre}"
