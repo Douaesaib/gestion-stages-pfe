@@ -26,5 +26,5 @@ class Candidature(models.Model):
     date_candidature = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.nom_etudiant} → {self.offre}"
+        return f"{self.nom_stagiaire} → {self.offre}"
 
