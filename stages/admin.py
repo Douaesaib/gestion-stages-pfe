@@ -4,8 +4,8 @@ from .models import Entreprise, Offre, Candidature
 
 @admin.register(Entreprise)
 class EntrepriseAdmin(admin.ModelAdmin):
-    list_display = ("nom", "secteur")
-    search_fields = ("nom", "secteur")
+    list_display = ("nom", "secteur", "email", "telephone")
+    search_fields = ("nom", "secteur", "email")
 
 
 @admin.register(Offre)
