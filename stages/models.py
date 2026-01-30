@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Entreprise(models.Model):
     nom = models.CharField(max_length=255)
     adresse = models.TextField()
@@ -25,7 +26,5 @@ class Candidature(models.Model):
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
 
-  def __str__(self):
-    return f"{self.nom_stagiaire} → {self.offre}"
-
-
+    def __str__(self):
+        return f"{self.nom_stagiaire} → {self.offre}"
