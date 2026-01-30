@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from .models import Offre, Candidature
 
 
@@ -12,9 +13,19 @@ def postuler(request, offre_id):
 
     if request.method == "POST":
         nom = request.POST.get("nom_stagiaire", "").strip()
-        if nom:
-            Candidature.objects.create(offre=offre, nom_stagiaire=nom)
+
+        if not nom:
+            messages.error(request, "Veuillez saisir votre nom.")
+            return render(request, "stages/postuler.html", {"offre": offre})
+
+        # منع نفس الاسم يترشح لنفس العرض مرة أخرى
+        existe_deja = Candidature.objects.filter(offre=offre, nom_stagiaire=nom).exists()
+        if existe_deja:
+            messages.warning(request, "Vous avez déjà postulé à cette offre.")
             return redirect("stages:offres_list")
 
-    return render(request, "stages/postuler.html", {"offre": offre})
+        Candidature.objects.create(offre=offre, nom_stagiaire=nom)
+        messages.success(request, "Votre candidature a été envoyée ✅")
+        return redirect("stages:offres_list")
 
+    return render(request, "stages/postuler.html", {"offre": offre})
