@@ -3,7 +3,11 @@ from django.db import models
 
 class Entreprise(models.Model):
     nom = models.CharField(max_length=255)
-    adresse = models.TextField()
+    adresse = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    telephone = models.CharField(max_length=20, blank=True)
+    site_web = models.URLField(blank=True)
+    description = models.TextField(blank=True)
     secteur = models.CharField(max_length=100)
 
     def __str__(self):
