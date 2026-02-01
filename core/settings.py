@@ -53,9 +53,19 @@ WSGI_APPLICATION = "core.wsgi.application"
 # ✅ Database (MySQL)
 DATABASES = {
     "default": {
-    "ENGINE": "django.db.backends.sqlite3",
-    "NAME": BASE_DIR / "db.sqlite3",
-  }
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "pfe_db",
+        "USER": "root",
+        "PASSWORD": "root",
+        "HOST": "127.0.0.1",
+        "PORT": "8889",
+
+        # ✅ مهم باش العربية/الفرنسية ما يوقعش ليها مشاكل + MySQL strict
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            "charset": "utf8mb4",
+        },
+    }
 }
 
 AUTH_PASSWORD_VALIDATORS = [
