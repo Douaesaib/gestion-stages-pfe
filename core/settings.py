@@ -1,7 +1,5 @@
 from pathlib import Path
 
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-change-this-in-production"
@@ -15,7 +13,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "stages",
 ]
 
@@ -50,15 +47,13 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # ✅ Database (MySQL)
 DATABASES = {
-  "default": {
+    "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "pfe_db",
         "USER": "root",
-        "PASSWORD": "root",   # ولا خليه "" إلا كان root بلا password
+        "PASSWORD": "root",  # ولا خليه "" إلا كان root بلا password
         "HOST": "127.0.0.1",
         "PORT": "3306",
-    
-        # ✅ مهم باش العربية/الفرنسية ما يوقعش ليها مشاكل + MySQL strict
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
             "charset": "utf8mb4",
