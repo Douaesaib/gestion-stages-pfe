@@ -50,14 +50,14 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 # ✅ Database (MySQL)
 DATABASES = {
-    "default": {
+  "default": {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "pfe_db",
         "USER": "root",
-        "PASSWORD": "root",
+        "PASSWORD": "root",   # ولا خليه "" إلا كان root بلا password
         "HOST": "127.0.0.1",
         "PORT": "3306",
-
+    
         # ✅ مهم باش العربية/الفرنسية ما يوقعش ليها مشاكل + MySQL strict
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
