@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Démo IA - Smart Matching</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #2c3e50; margin-bottom: 10px; }
+        .subtitle { color: #7f8c8d; margin-bottom: 40px; }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 900px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #34495e;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            resize: none;
+            transition: border-color 0.3s;
+        }
+        textarea:focus { border-color: #3498db; outline: none; }
+
+        .btn-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .btn-submit:hover { transform: scale(1.02); }
+
+        /* RESULTAT */
+        .result-box {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 10px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0 auto 20px auto;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🧠 Smart Matching AI</h1>
+    <p class="subtitle">Copiez un CV et une Offre pour tester l'algorithme en temps réel.</p>
+
+    <div class="container">
+        <form method="POST">
+            {% csrf_token %} <div class="form-grid">
+                <div class="input-group">
+                    <label>📄 Compétences du Stagiaire</label>
+                    <textarea name="cv_text" placeholder="Ex: Java, Python, SQL, motivé...">{{ cv_text }}</textarea>
+                </div>
+
+                <div class="input-group">
+                    <label>💼 Description de l'Offre</label>
+                    <textarea name="offre_text" placeholder="Ex: Recherche développeur Backend Python Django...">{{ offre_text }}</textarea>
+                </div>
+                
+                <button type="submit" class="btn-submit">Lancer l'Analyse 🚀</button>
+            </div>
+        </form>
+
+        {% if score is not None %}
+        <div class="result-box">
+            <h3>Résultat de compatibilité</h3>
+            <div class="score-circle" style="border-color: {{ color }}; color: {{ color }};">
+                {{ score }}%
+            </div>
+            <p>L'algorithme a analysé la sémantique des deux textes.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
