@@ -1,8 +1,6 @@
 from pathlib import Path
 
-# ✅ MySQL driver (PyMySQL)
-import pymysql
-pymysql.install_as_MySQLdb()
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
