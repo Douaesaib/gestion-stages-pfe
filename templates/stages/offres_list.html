@@ -22,8 +22,6 @@
       --muted: rgba(255,255,255,0.64);
       --primary1:#3B82F6;
       --primary2:#8B5CF6;
-      --good:#22C55E;
-      --warn:#F59E0B;
     }
 
     /* ===== Dark Premium Background ===== */
@@ -75,17 +73,12 @@
       transform: rotate(10deg);
       opacity: .95;
     }
-    .hero h1{
-      letter-spacing: .2px;
-    }
     .hero p{
       color: var(--muted);
       max-width: 850px;
       margin: 0 auto;
       line-height: 1.55;
     }
-
-    /* New header design related to site content */
     .hero-accent{
       height: 6px;
       width: 100%;
@@ -113,11 +106,8 @@
       font-weight: 700;
       font-size: .92rem;
     }
-    .stat i{
-      opacity: .95;
-    }
 
-    /* ===== Card ===== */
+    /* ===== Cards ===== */
     .card{
       border: 1px solid var(--border);
       border-radius: 18px;
@@ -150,15 +140,69 @@
       border-color: rgba(255,255,255,0.16);
     }
 
+    /* Title more prominent */
     .card-title{
       color: var(--text);
-      line-height: 1.25;
+      line-height: 1.18;
+      font-size: 1.22rem;
+      letter-spacing: .2px;
+      margin-bottom: 10px;
     }
-    .subtle{
-      color: var(--muted);
+    /* Keep title nice on long text */
+    .clamp-2{
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    /* ===== Info blocks for fast reading ===== */
+    .subtle{ color: var(--muted); }
+
+    /* ===== NEW: Meta bars (replace over-rounded pills) ===== */
+    .meta-stack{
+      display: grid;
+      gap: 10px;
+      margin-top: 6px;
+      margin-bottom: 14px;
+    }
+    .meta-bar{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .meta-bar .meta-ico{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.90);
+      flex: 0 0 auto;
+    }
+    .meta-bar .meta-text{
+      font-weight: 800;
+      font-size: 1.06rem;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.2;
+    }
+    .meta-bar.meta-date{
+      background: rgba(34,197,94,0.16);
+      border-color: rgba(34,197,94,0.22);
+    }
+    .meta-bar.meta-date .meta-ico{
+      background: rgba(34,197,94,0.18);
+      border-color: rgba(34,197,94,0.22);
+    }
+
+    /* ===== Info grid (contacts) ===== */
     .info-grid{
       display: grid;
       grid-template-columns: 1fr;
@@ -187,7 +231,7 @@
       flex: 0 0 auto;
     }
     .info-k{
-      font-weight: 800;
+      font-weight: 900;
       font-size: .88rem;
       color: rgba(255,255,255,0.86);
       margin-bottom: 2px;
@@ -199,29 +243,11 @@
       line-height: 1.25;
     }
 
-    /* ===== Badges ===== */
-    .badge-sector{
-      border-radius: 999px;
-      padding: .45rem .75rem;
-      font-weight: 800;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.86);
-    }
-    .badge-period{
-      border-radius: 999px;
-      padding: .40rem .70rem;
-      font-weight: 800;
-      background: rgba(34,197,94,0.14);
-      border: 1px solid rgba(34,197,94,0.22);
-      color: rgba(209,255,225,0.92);
-    }
-
     /* ===== Button ===== */
     .btn-primary{
       border: none;
       border-radius: 14px;
-      padding: .78rem .95rem;
+      padding: .80rem .95rem;
       font-weight: 900;
       background: linear-gradient(135deg, var(--primary1), var(--primary2));
       box-shadow: 0 12px 26px rgba(59,130,246,0.25);
@@ -237,7 +263,7 @@
     a{ color: rgba(147,197,253,0.95); }
     a:hover{ color: rgba(191,219,254,1); }
 
-    /* ===== Reveal on scroll ===== */
+    /* Reveal on scroll */
     .reveal{
       opacity: 0;
       transform: translateY(18px) scale(0.985);
@@ -288,7 +314,6 @@
 
     <div class="hero-accent"></div>
 
-    <!-- Design related to content: "stats" / guidance -->
     <div class="hero-stats">
       <div class="stat">
         <i class="bi bi-briefcase-fill"></i>
@@ -312,30 +337,29 @@
           <div class="card h-100">
             <div class="card-body d-flex flex-column p-4">
 
-              <!-- Title -->
-              <h5 class="card-title fw-bold mb-2">
+              <!-- Titre (prominent) -->
+              <h5 class="card-title fw-bold clamp-2">
                 <i class="bi bi-briefcase-fill me-2 text-info"></i>{{ offre.titre }}
               </h5>
 
-              <!-- Company + sector -->
-              <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                <span class="badge-sector">
-                  <i class="bi bi-building me-1"></i>{{ offre.entreprise.nom }}
-                </span>
+              <!-- NEW meta bars -->
+              <div class="meta-stack">
+                <div class="meta-bar">
+                  <div class="meta-ico"><i class="bi bi-building"></i></div>
+                  <div class="meta-text">{{ offre.entreprise.nom }}</div>
+                </div>
 
                 {% if offre.entreprise.secteur %}
-                  <span class="badge-sector">
-                    <i class="bi bi-tags-fill me-1"></i>{{ offre.entreprise.secteur }}
-                  </span>
+                <div class="meta-bar">
+                  <div class="meta-ico"><i class="bi bi-tag"></i></div>
+                  <div class="meta-text">{{ offre.entreprise.secteur }}</div>
+                </div>
                 {% endif %}
-              </div>
 
-              <!-- Period -->
-              <div class="mb-3">
-                <span class="badge-period">
-                  <i class="bi bi-calendar-range me-1"></i>
-                  {{ offre.date_debut }} → {{ offre.date_fin }}
-                </span>
+                <div class="meta-bar meta-date">
+                  <div class="meta-ico"><i class="bi bi-calendar-event"></i></div>
+                  <div class="meta-text">{{ offre.date_debut }} → {{ offre.date_fin }}</div>
+                </div>
               </div>
 
               <!-- Description -->
@@ -343,7 +367,7 @@
                 {{ offre.description|truncatechars:140 }}
               </p>
 
-              <!-- Info grid -->
+              <!-- Contacts -->
               <div class="info-grid mb-3">
 
                 {% if offre.entreprise.email %}
