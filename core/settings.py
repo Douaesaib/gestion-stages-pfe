@@ -51,7 +51,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "pfe_db",
         "USER": "root",
-        "PASSWORD": "root",  # ولا خليه "" إلا كان root بلا password
+        "PASSWORD": "", 
         "HOST": "127.0.0.1",
         "PORT": "3306",
         "OPTIONS": {
