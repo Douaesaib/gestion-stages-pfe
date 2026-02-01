@@ -2,25 +2,292 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Postuler</title>
+
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons (optional but nice) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0B1220;
+      --card: rgba(17, 25, 40, 0.72);
+      --card2: rgba(17, 25, 40, 0.58);
+      --border: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --primary1:#3B82F6;
+      --primary2:#8B5CF6;
+
+      /* Purple cold accent (like previous page) */
+      --datePurple: rgba(167, 139, 250, 0.95);
+      --datePurpleSoft: rgba(167, 139, 250, 0.18);
+    }
+
+    /* ===== Background ===== */
+    body{
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(59,130,246,0.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 15%, rgba(139,92,246,0.20), transparent 60%),
+        radial-gradient(900px 600px at 30% 90%, rgba(34,197,94,0.12), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      animation: grain 11s linear infinite;
+    }
+    @keyframes grain{
+      0%{ transform: translate3d(0,0,0); }
+      50%{ transform: translate3d(-2%, 1%, 0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    /* ===== Page shell ===== */
+    .shell{
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    /* ===== Hero / header ===== */
+    .hero{
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(17,25,40,0.72), rgba(17,25,40,0.52));
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 55px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+      padding: 22px 20px;
+      margin-bottom: 18px;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-160px -200px auto auto;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle at 30% 30%, rgba(139,92,246,.35), transparent 60%);
+      transform: rotate(10deg);
+      opacity: .95;
+    }
+    .hero h1{
+      margin: 0;
+      font-weight: 900;
+      font-size: 1.55rem;
+      line-height: 1.15;
+      position: relative;
+      z-index: 1;
+    }
+    .hero p{
+      margin: 8px 0 0;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(167, 139, 250, 0.32);
+      background: linear-gradient(180deg, var(--datePurpleSoft), rgba(255,255,255,0.03));
+      color: var(--datePurple);
+      font-weight: 800;
+      font-size: .92rem;
+      position: relative;
+      z-index: 1;
+      width: fit-content;
+    }
+
+    /* ===== Card form ===== */
+    .glass-card{
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 38px rgba(0,0,0,0.32);
+      overflow: hidden;
+      position: relative;
+    }
+    .glass-card::before{
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0;
+      height: 3px;
+      background: linear-gradient(90deg,
+        rgba(59,130,246,.0),
+        rgba(59,130,246,.65),
+        rgba(139,92,246,.60),
+        rgba(34,197,94,.45),
+        rgba(59,130,246,.0)
+      );
+      opacity: .95;
+    }
+
+    /* ===== Inputs ===== */
+    .form-label{
+      color: rgba(255,255,255,0.82);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .form-control{
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.92);
+      border-radius: 14px;
+      padding: .78rem .9rem;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .form-control::placeholder{
+      color: rgba(255,255,255,0.45);
+    }
+    .form-control:focus{
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(167, 139, 250, 0.55);
+      box-shadow: 0 0 0 .22rem rgba(167, 139, 250, 0.14);
+      color: rgba(255,255,255,0.95);
+    }
+
+    /* ===== Buttons ===== */
+    .btn-primary{
+      border: none;
+      border-radius: 14px;
+      padding: .78rem 1rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary1), var(--primary2));
+      box-shadow: 0 12px 26px rgba(59,130,246,0.25);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-primary:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(59,130,246,0.34);
+    }
+
+    .btn-soft{
+      border-radius: 14px;
+      padding: .78rem 1rem;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.88);
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .btn-soft:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.20);
+      color: rgba(255,255,255,0.92);
+    }
+
+    /* Small helper text */
+    .hint{
+      color: rgba(255,255,255,0.60);
+      font-size: .92rem;
+      margin-top: 6px;
+    }
+
+    /* Reveal */
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.2,.65,.2,1);
+    }
+    .reveal.is-visible{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal, body::before{ animation: none !important; transition: none !important; transform: none !important; }
+    }
+  </style>
 </head>
-<body class="bg-light">
 
-<div class="container py-4">
-  <h1>Postuler à : {{ offre.titre }}</h1>
-  <p class="text-muted">Entreprise : {{ offre.entreprise.nom }}</p>
+<body>
 
-  <form method="POST" class="card p-3 shadow-sm">
-    {% csrf_token %}
-    <div class="mb-3">
-      <label class="form-label">Nom du stagiaire</label>
-      <input class="form-control" name="nom_stagiaire" required>
+<div class="container py-5">
+  <div class="shell">
+
+    <!-- Header -->
+    <div class="hero reveal">
+      <h1>
+        <i class="bi bi-send-fill me-2 text-info"></i>
+        Postuler à : {{ offre.titre }}
+      </h1>
+
+      <p class="mb-0">
+        Entreprise : <strong>{{ offre.entreprise.nom }}</strong>
+      </p>
+
+      <div class="chip">
+        <i class="bi bi-shield-check"></i>
+        Formulaire de candidature
+      </div>
     </div>
-    <button class="btn btn-success">Envoyer</button>
-    <a class="btn btn-secondary" href="{% url 'stages:offres_list' %}">Retour</a>
-  </form>
+
+    <!-- Form Card -->
+    <form method="POST" class="glass-card p-4 reveal">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Nom du stagiaire</label>
+        <input class="form-control" name="nom_stagiaire" placeholder="Ex: Ahmed El..." required>
+        <div class="hint">Saisis ton nom complet comme dans ta carte d’identité.</div>
+      </div>
+
+      <div class="d-flex flex-column flex-sm-row gap-2 mt-3">
+        <button class="btn btn-primary flex-fill">
+          🚀 Envoyer
+        </button>
+
+        <a class="btn btn-soft flex-fill" href="{% url 'stages:offres_list' %}">
+          <i class="bi bi-arrow-left me-1"></i>Retour
+        </a>
+      </div>
+    </form>
+
+  </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Simple reveal
+  (function () {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+
+    els.forEach((el, i) => {
+      el.style.transitionDelay = (i * 90) + "ms";
+      obs.observe(el);
+    });
+  })();
+</script>
 
 </body>
 </html>
