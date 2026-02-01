@@ -7,139 +7,283 @@
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <style>
     :root{
       --bg0:#070A12;
       --bg1:#0B1220;
-      --card: rgba(17,25,40,.72);
-      --card2: rgba(17,25,40,.58);
-      --border: rgba(255,255,255,.10);
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.65);
-      --blue:#3B82F6;
-      --green:#22C55E;
+      --card: rgba(17, 25, 40, 0.72);
+      --card2: rgba(17, 25, 40, 0.58);
+      --border: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.62);
+      --muted2: rgba(255,255,255,0.72);
+      --primary1:#3B82F6;
+      --primary2:#8B5CF6;
+
+      /* ✅ Purple “bared” for date */
+      --datePurple: rgba(167, 139, 250, 0.95); /* قريب لـ violet بارد */
+      --datePurpleSoft: rgba(167, 139, 250, 0.22);
     }
 
+    /* ===== Background ===== */
     body{
-      min-height:100vh;
+      min-height: 100vh;
+      color: var(--text);
       background:
-        radial-gradient(1200px 600px at 15% 10%, rgba(59,130,246,.22), transparent 55%),
-        radial-gradient(900px 500px at 85% 15%, rgba(139,92,246,.20), transparent 60%),
-        linear-gradient(180deg,var(--bg0),var(--bg1));
-      color:var(--text);
+        radial-gradient(1200px 600px at 15% 10%, rgba(59,130,246,0.22), transparent 55%),
+        radial-gradient(900px 500px at 85% 15%, rgba(139,92,246,0.20), transparent 60%),
+        radial-gradient(900px 600px at 30% 90%, rgba(34,197,94,0.12), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      background-attachment: fixed;
+      overflow-x: hidden;
     }
 
-    /* ===== CARD ===== */
+    body::before{
+      content:"";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+      animation: grain 11s linear infinite;
+    }
+    @keyframes grain{
+      0%{ transform: translate3d(0,0,0); }
+      50%{ transform: translate3d(-2%, 1%, 0); }
+      100%{ transform: translate3d(0,0,0); }
+    }
+
+    /* ===== Hero ===== */
+    .hero{
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(17,25,40,0.72), rgba(17,25,40,0.52));
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 55px rgba(0,0,0,.35);
+      position: relative;
+      overflow: hidden;
+      padding: 28px 22px;
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      inset:-140px -180px auto auto;
+      width: 360px; height: 360px;
+      background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.35), transparent 60%);
+      transform: rotate(10deg);
+      opacity: .95;
+    }
+    .hero p{
+      color: var(--muted);
+      max-width: 850px;
+      margin: 0 auto;
+      line-height: 1.55;
+    }
+    .hero-accent{
+      height: 6px;
+      width: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(59,130,246,.0), rgba(59,130,246,.70), rgba(139,92,246,.65), rgba(34,197,94,.50), rgba(59,130,246,.0));
+      margin: 14px auto 0;
+      opacity: .95;
+    }
+
+    /* ===== Card ===== */
     .card{
-      border-radius:18px;
-      background:linear-gradient(180deg,var(--card),var(--card2));
-      border:1px solid var(--border);
-      box-shadow:0 14px 40px rgba(0,0,0,.35);
-      transition:.25s ease;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 38px rgba(0,0,0,0.32);
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0;
+      height: 3px;
+      background: linear-gradient(90deg,
+        rgba(59,130,246,.0),
+        rgba(59,130,246,.65),
+        rgba(139,92,246,.60),
+        rgba(34,197,94,.45),
+        rgba(59,130,246,.0)
+      );
+      opacity: .95;
     }
     .card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 22px 55px rgba(0,0,0,.45);
+      transform: translateY(-8px);
+      box-shadow: 0 22px 56px rgba(0,0,0,0.45);
+      border-color: rgba(255,255,255,0.16);
     }
 
-    /* ===== TITLE ===== */
+    /* ===== Priority: Title + Company ===== */
     .stage-title{
-      font-size:1.3rem;
-      font-weight:900;
-      line-height:1.2;
-      margin-bottom:12px;
+      color: var(--text);
+      font-weight: 900;
+      font-size: 1.28rem;
+      line-height: 1.18;
+      letter-spacing: .2px;
+      margin: 0 0 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-
-    /* ===== COMPANY ===== */
     .company-bar{
       display:flex;
       align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:14px;
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      margin-bottom:10px;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      margin-bottom: 10px;
     }
-    .company-bar i{
-      background:rgba(255,255,255,.08);
-      border-radius:10px;
-      padding:8px;
-    }
-    .company-name{
-      font-weight:800;
-      font-size:1.05rem;
-    }
-
-    /* ===== META LINE ===== */
-    .meta-line{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:.9rem;
-      margin-bottom:14px;
-    }
-    .meta-item{
+    .company-ico{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
       display:flex;
       align-items:center;
-      gap:6px;
-      padding:6px 10px;
-      border-radius:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      color:var(--muted);
+      justify-content:center;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.90);
+      flex: 0 0 auto;
+    }
+    .company-name{
+      font-weight: 850;
+      font-size: 1.06rem;
+      color: rgba(255,255,255,0.92);
+      line-height: 1.2;
     }
 
-    /* GREEN DATE */
-    .meta-item.date-green{
-      background:rgba(34,197,94,.18);
-      border-color:rgba(34,197,94,.28);
-      color:#d1ffe1;
-      font-weight:700;
+    /* ===== Secondary: Sector + Date (small, normal) ===== */
+    .meta-line{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+      color: rgba(255,255,255,0.68);
+      font-size: .90rem;
+      margin-bottom: 12px;
+    }
+    .meta-item{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+    .meta-item i{
+      opacity: .9;
     }
 
-    /* ===== DESCRIPTION ===== */
-    .description{
-      color:var(--muted);
-      font-size:.95rem;
-      line-height:1.55;
-      margin-bottom:16px;
+    /* ✅ ONLY the date meta-item becomes purple (cold) */
+    .meta-item.meta-date{
+      border-color: rgba(167, 139, 250, 0.35);
+      background: linear-gradient(180deg, var(--datePurpleSoft), rgba(255,255,255,0.03));
+    }
+    .meta-item.meta-date,
+    .meta-item.meta-date span{
+      color: var(--datePurple);
+    }
+    .meta-item.meta-date i{
+      color: var(--datePurple);
+      opacity: 1;
     }
 
-    /* ===== CONTACT ===== */
+    .subtle{ color: var(--muted); }
+
+    /* ===== Contacts (keep readable, not loud) ===== */
+    .info-grid{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
     .info-row{
       display:flex;
-      gap:10px;
-      padding:10px 12px;
-      border-radius:14px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
-      margin-bottom:10px;
+      align-items:flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .info-row i{
-      background:rgba(59,130,246,.18);
-      border-radius:10px;
-      padding:8px;
+    .info-ico{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(59,130,246,0.14);
+      border: 1px solid rgba(59,130,246,0.20);
+      color: rgba(255,255,255,0.92);
+      flex: 0 0 auto;
     }
-    .info-title{
-      font-weight:800;
-      font-size:.85rem;
+    .info-k{
+      font-weight: 900;
+      font-size: .88rem;
+      color: rgba(255,255,255,0.84);
+      margin-bottom: 2px;
+      letter-spacing: .2px;
     }
-    .info-value{
-      font-size:.9rem;
-      color:var(--muted);
+    .info-v{
+      color: rgba(255,255,255,0.70);
+      font-size: .92rem;
+      line-height: 1.25;
     }
 
-    /* ===== BUTTON ===== */
+    /* ===== Button ===== */
     .btn-primary{
-      border:none;
-      border-radius:14px;
-      padding:.85rem;
-      font-weight:900;
-      background:linear-gradient(135deg,#4f8cff,#7b5cff);
-      box-shadow:0 12px 28px rgba(79,140,255,.35);
+      border: none;
+      border-radius: 14px;
+      padding: .80rem .95rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary1), var(--primary2));
+      box-shadow: 0 12px 26px rgba(59,130,246,0.25);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-primary:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.05);
+      box-shadow: 0 16px 34px rgba(59,130,246,0.34);
+    }
+
+    a{ color: rgba(147,197,253,0.95); }
+    a:hover{ color: rgba(191,219,254,1); }
+
+    /* ===== Reveal on scroll ===== */
+    .reveal{
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.2,.65,.2,1);
+    }
+    .reveal.is-visible{
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      transition-delay: var(--d, 0ms);
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .reveal, .card, body::before{
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -147,94 +291,175 @@
 <body>
 
 <div class="container py-5">
-  <div class="row g-4">
 
-    {% for offre in offres %}
-    <div class="col-md-6 col-lg-4">
-      <div class="card h-100">
-        <div class="card-body d-flex flex-column p-4">
+  <!-- Messages -->
+  {% if messages %}
+    <div class="mb-4">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
 
-          <!-- TITLE -->
-          <div class="stage-title">
-            <i class="bi bi-briefcase-fill text-info me-2"></i>
-            {{ offre.titre }}
-          </div>
+  <!-- Hero -->
+  <div class="text-center mb-5 hero reveal">
+    <h1 class="fw-bold mb-2">
+      <i class="bi bi-mortarboard-fill me-2"></i>Offres de stage disponibles
+    </h1>
 
-          <!-- COMPANY -->
-          <div class="company-bar">
-            <i class="bi bi-building"></i>
-            <div class="company-name">{{ offre.entreprise.nom }}</div>
-          </div>
+    <p class="mb-0">
+      Trouvez rapidement l’offre qui vous correspond. Consultez l’entreprise et les informations utiles,
+      puis cliquez sur <strong>Postuler</strong>.
+    </p>
 
-          <!-- META -->
-          <div class="meta-line">
-            {% if offre.entreprise.secteur %}
-            <div class="meta-item">
-              <i class="bi bi-tag"></i>
-              {{ offre.entreprise.secteur }}
-            </div>
-            {% endif %}
+    <div class="hero-accent"></div>
+  </div>
 
-            <div class="meta-item date-green">
-              <i class="bi bi-calendar-event"></i>
-              {{ offre.date_debut }} → {{ offre.date_fin }}
-            </div>
-          </div>
+  {% if offres %}
+    <div class="row g-4">
+      {% for offre in offres %}
+        <div class="col-md-6 col-lg-4 reveal">
+          <div class="card h-100">
+            <div class="card-body d-flex flex-column p-4">
 
-          <!-- DESCRIPTION -->
-          <div class="description">
-            {{ offre.description|truncatechars:140 }}
-          </div>
+              <!-- 1) Title (MOST IMPORTANT) -->
+              <h5 class="stage-title">
+                <i class="bi bi-briefcase-fill me-2 text-info"></i>{{ offre.titre }}
+              </h5>
 
-          <!-- CONTACT -->
-          {% if offre.entreprise.email %}
-          <div class="info-row">
-            <i class="bi bi-envelope-fill"></i>
-            <div>
-              <div class="info-title">Email</div>
-              <div class="info-value">{{ offre.entreprise.email }}</div>
-            </div>
-          </div>
-          {% endif %}
+              <!-- 2) Company (SECOND IMPORTANT) -->
+              <div class="company-bar">
+                <div class="company-ico"><i class="bi bi-building"></i></div>
+                <div class="company-name">{{ offre.entreprise.nom }}</div>
+              </div>
 
-          {% if offre.entreprise.telephone %}
-          <div class="info-row">
-            <i class="bi bi-telephone-fill"></i>
-            <div>
-              <div class="info-title">Téléphone</div>
-              <div class="info-value">{{ offre.entreprise.telephone }}</div>
-            </div>
-          </div>
-          {% endif %}
+              <!-- 3) Secondary info (small & normal) -->
+              <div class="meta-line">
+                {% if offre.entreprise.secteur %}
+                  <span class="meta-item">
+                    <i class="bi bi-tag"></i>
+                    <span>{{ offre.entreprise.secteur }}</span>
+                  </span>
+                {% endif %}
 
-          {% if offre.entreprise.site_web %}
-          <div class="info-row">
-            <i class="bi bi-globe2"></i>
-            <div>
-              <div class="info-title">Site web</div>
-              <div class="info-value">
-                <a href="{{ offre.entreprise.site_web }}" target="_blank">
-                  Visiter le site <i class="bi bi-box-arrow-up-right"></i>
+                <!-- ✅ added meta-date class here (ONLY change in HTML) -->
+                <span class="meta-item meta-date">
+                  <i class="bi bi-calendar-event"></i>
+                  <span>{{ offre.date_debut }} → {{ offre.date_fin }}</span>
+                </span>
+              </div>
+
+              <!-- Description -->
+              <p class="subtle mb-3" style="line-height:1.55;">
+                {{ offre.description|truncatechars:140 }}
+              </p>
+
+              <!-- Contacts -->
+              <div class="info-grid mb-3">
+
+                {% if offre.entreprise.email %}
+                  <div class="info-row">
+                    <div class="info-ico"><i class="bi bi-envelope-fill"></i></div>
+                    <div>
+                      <div class="info-k">Email</div>
+                      <div class="info-v">{{ offre.entreprise.email }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if offre.entreprise.telephone %}
+                  <div class="info-row">
+                    <div class="info-ico"><i class="bi bi-telephone-fill"></i></div>
+                    <div>
+                      <div class="info-k">Téléphone</div>
+                      <div class="info-v">{{ offre.entreprise.telephone }}</div>
+                    </div>
+                  </div>
+                {% endif %}
+
+                {% if offre.entreprise.site_web %}
+                  <div class="info-row">
+                    <div class="info-ico"><i class="bi bi-globe2"></i></div>
+                    <div>
+                      <div class="info-k">Site web</div>
+                      <div class="info-v">
+                        <a href="{{ offre.entreprise.site_web }}" target="_blank" class="text-decoration-none">
+                          Visiter le site <i class="bi bi-box-arrow-up-right ms-1"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+
+              </div>
+
+              <!-- Button -->
+              <div class="mt-auto">
+                <a class="btn btn-primary w-100"
+                   href="{% url 'stages:postuler' offre.id %}">
+                  🚀 Postuler
                 </a>
               </div>
+
             </div>
           </div>
-          {% endif %}
-
-          <!-- BUTTON -->
-          <div class="mt-auto pt-2">
-            <a href="{% url 'stages:postuler' offre.id %}" class="btn btn-primary w-100">
-              🚀 Postuler
-            </a>
-          </div>
-
         </div>
-      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+  {% else %}
+    <div class="alert alert-info text-center reveal">
+      Aucune offre disponible pour le moment.
+    </div>
+  {% endif %}
 
-  </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Reveal on scroll
+  (function () {
+    const els = document.querySelectorAll(".reveal");
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("is-visible");
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+
+    els.forEach((el, i) => {
+      el.style.setProperty("--d", (i % 12) * 70 + "ms");
+      obs.observe(el);
+    });
+  })();
+
+  // Tiny tilt on cards (desktop only)
+  (function () {
+    const cards = document.querySelectorAll(".card");
+    const isTouch = matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
+    cards.forEach((card) => {
+      card.addEventListener("mousemove", (e) => {
+        const r = card.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        const rx = ((y / r.height) - 0.5) * -5;
+        const ry = ((x / r.width) - 0.5) *  7;
+        card.style.transform = `translateY(-8px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
+    });
+  })();
+</script>
 
 </body>
 </html>
