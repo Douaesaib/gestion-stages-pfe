@@ -4,10 +4,9 @@ from django.http import FileResponse, HttpResponse
 from .ai_matching import calculer_score_matching
 from stages.models import Offre, Entreprise
 from django.contrib.auth.decorators import login_required
-from stages.models import Offre
 from users.models import Stagiaire
 
-
+@login_required
 def dashboard_view(request):
     #en remplace plus tard par Stagiaire.objects.count()
     context = {
@@ -69,30 +68,27 @@ def demo_ai_view(request):
 
 @login_required
 def recommandations_view(request):
-    # 1. Recuperer l'étudiant
     try:
         le_stagiaire = Stagiaire.objects.get(user=request.user)
         mes_competences = le_stagiaire.competences
         nom_complet = f"{request.user.first_name} {request.user.last_name}"
     except Stagiaire.DoesNotExist:
-        # Cas Secours
-        mes_competences = "Python, Django, SQL" 
+        mes_competences = "Python, Django, SQL"
         nom_complet = "Administrateur"
 
     offres_db = Offre.objects.all()
     offres_recommandees = []
 
-    # 3. Traitement IA
     for offre in offres_db:
-        texte_offre = f"{offre.titre} {offre.description}" 
+        texte_a_analyser = f"{offre.titre} {offre.description}"
         
-        score = calculer_score_matching(mes_competences, texte_offre)
+        score = calculer_score_matching(mes_competences, texte_a_analyser)
+        
         offre.score_calcule = score
         
         if score > 20:
             offres_recommandees.append(offre)
 
-    # 4. Tri par score
     offres_recommandees.sort(key=lambda x: x.score_calcule, reverse=True)
 
     return render(request, 'analytics/recommandations.html', {
