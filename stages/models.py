@@ -27,16 +27,23 @@ class Offre(models.Model):
 
 class Candidature(models.Model):
     nom_stagiaire = models.CharField(max_length=150)
+    prenom_stagiaire = models.CharField(max_length=150)
+    email = models.EmailField()
+    telephone = models.CharField(max_length=30)
+
+    # CV upload
+    cv = models.FileField(upload_to="cvs/")
+
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["offre", "nom_stagiaire"],
+                fields=["offre", "nom_stagiaire", "prenom_stagiaire"],
                 name="unique_candidature_par_offre"
             )
         ]
 
     def __str__(self):
-        return f"{self.nom_stagiaire} → {self.offre}"
+        return f"{self.nom_stagiaire} {self.prenom_stagiaire} → {self.offre}"
