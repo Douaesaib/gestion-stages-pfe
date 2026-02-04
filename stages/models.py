@@ -32,7 +32,7 @@ class Candidature(models.Model):
     telephone = models.CharField(max_length=30)
 
     # CV upload
-    cv = models.FileField(upload_to="cvs/")
+    cv = models.FileField(upload_to="cvs/", null=True, blank=True)
 
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
