@@ -27,11 +27,13 @@ class Offre(models.Model):
 
 class Candidature(models.Model):
     nom_stagiaire = models.CharField(max_length=150)
-    prenom_stagiaire = models.CharField(max_length=150)
-    email = models.EmailField()
-    telephone = models.CharField(max_length=30)
 
-    # CV upload
+    # ✅ نخليهم null/blank باش migration تدوز بلا default (حيت كاينين سجلات قدام)
+    prenom_stagiaire = models.CharField(max_length=150, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+    telephone = models.CharField(max_length=30, null=True, blank=True)
+
+    # ✅ CV upload
     cv = models.FileField(upload_to="cvs/", null=True, blank=True)
 
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
@@ -46,4 +48,5 @@ class Candidature(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.nom_stagiaire} {self.prenom_stagiaire} → {self.offre}"
+        prenom = self.prenom_stagiaire or ""
+        return f"{self.nom_stagiaire} {prenom} → {self.offre}"
