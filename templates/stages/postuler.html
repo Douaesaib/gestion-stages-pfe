@@ -243,35 +243,52 @@
     </div>
 
     <!-- Form Card -->
-   <form method="POST" enctype="multipart/form-data" class="glass-card p-4 reveal">
+    <form method="POST" enctype="multipart/form-data" class="glass-card p-4 reveal">
   {% csrf_token %}
 
   <div class="row g-3">
 
     <div class="col-md-6">
       <label class="form-label">Nom</label>
-      <input type="text" class="form-control" name="nom" placeholder="Ex: El..." required autocomplete="family-name">
+      <input type="text" class="form-control"
+             name="nom_stagiaire"
+             placeholder="Ex: El..."
+             required>
     </div>
 
     <div class="col-md-6">
       <label class="form-label">Prénom</label>
-      <input type="text" class="form-control" name="prenom" placeholder="Ex: Ahmed..." required autocomplete="given-name">
+      <input type="text" class="form-control"
+             name="prenom_stagiaire"
+             placeholder="Ex: Ahmed..."
+             required>
     </div>
 
     <div class="col-md-6">
       <label class="form-label">Email</label>
-      <input type="email" class="form-control" name="email" placeholder="ex: ahmed@email.com" required autocomplete="email">
+      <input type="email" class="form-control"
+             name="email"
+             placeholder="ex: ahmed@email.com"
+             required>
     </div>
 
     <div class="col-md-6">
       <label class="form-label">Téléphone</label>
-      <input type="tel" class="form-control" name="telephone" placeholder="ex: 06xxxxxxxx" required autocomplete="tel">
+      <input type="tel" class="form-control"
+             name="telephone"
+             placeholder="ex: 06xxxxxxxx"
+             required>
     </div>
 
     <div class="col-12">
       <label class="form-label">CV (PDF)</label>
-      <input type="file" class="form-control" name="cv" accept=".pdf" required>
-      <div class="hint">Veuillez télécharger votre curriculum vitae exclusivement au format PDF</div>
+      <input type="file" class="form-control"
+             name="cv"
+             accept=".pdf"
+             required>
+      <div class="hint">
+        Veuillez télécharger votre CV exclusivement au format PDF
+      </div>
     </div>
 
   </div>
@@ -286,6 +303,7 @@
     </a>
   </div>
 </form>
+   
 
   </div>
 </div>
