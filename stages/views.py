@@ -6,34 +6,98 @@ from .models import Offre, Candidature
 
 
 def offres_list(request):
-    PRIORITY_KW = [
-        "informatique", "info", "it",
-        "dev", "dévelop", "develop", "developer", "software", "programm",
-        "web", "frontend", "backend", "full stack", "fullstack",
-        "data", "sql", "bi", "analytics", "machine", "ai", "ml",
-        "cyber", "sécurité", "security",
-        "réseau", "reseau", "network",
-        "cloud", "api", "devops",
-        "python", "java", "javascript", "typescript", "php", "node",
-        "django", "flask", "spring", "laravel", "react", "angular", "vue",
-        "c++", "c#", "dotnet"
-    ]
-
-    q = Q()
-    for kw in PRIORITY_KW:
-        q |= Q(titre__icontains=kw) | Q(description__icontains=kw) | Q(entreprise__secteur__icontains=kw)
-
     offres = (
         Offre.objects
         .select_related("entreprise")
         .annotate(
             priority=Case(
-                When(q, then=Value(0)),   
-                default=Value(1),        
+                # 0) DEV / Software / Web
+                When(
+                    Q(titre__icontains="dev") |
+                    Q(description__icontains="dev") |
+                    Q(entreprise__secteur__icontains="dev") |
+                    Q(titre__icontains="dévelop") |
+                    Q(description__icontains="dévelop") |
+                    Q(titre__icontains="develop") |
+                    Q(description__icontains="develop") |
+                    Q(titre__icontains="developer") |
+                    Q(description__icontains="developer") |
+                    Q(titre__icontains="software") |
+                    Q(description__icontains="software") |
+                    Q(titre__icontains="programm") |
+                    Q(description__icontains="programm") |
+                    Q(titre__icontains="web") |
+                    Q(description__icontains="web") |
+                    Q(titre__icontains="frontend") |
+                    Q(description__icontains="frontend") |
+                    Q(titre__icontains="backend") |
+                    Q(description__icontains="backend") |
+                    Q(titre__icontains="full stack") |
+                    Q(description__icontains="full stack") |
+                    Q(titre__icontains="fullstack") |
+                    Q(description__icontains="fullstack") |
+                    Q(titre__icontains="django") |
+                    Q(description__icontains="django") |
+                    Q(titre__icontains="react") |
+                    Q(description__icontains="react") |
+                    Q(titre__icontains="node") |
+                    Q(description__icontains="node"),
+                    then=Value(0)
+                ),
+
+                # 1) DATA / IT / INFORMATIQUE
+                When(
+                    Q(titre__icontains="data") |
+                    Q(description__icontains="data") |
+                    Q(entreprise__secteur__icontains="data") |
+                    Q(titre__icontains="sql") |
+                    Q(description__icontains="sql") |
+                    Q(titre__icontains="bi") |
+                    Q(description__icontains="bi") |
+                    Q(titre__icontains="analytics") |
+                    Q(description__icontains="analytics") |
+                    Q(titre__icontains="informatique") |
+                    Q(description__icontains="informatique") |
+                    Q(entreprise__secteur__icontains="informatique") |
+                    Q(titre__icontains="it") |
+                    Q(description__icontains="it") |
+                    Q(entreprise__secteur__icontains="it") |
+                    Q(titre__icontains="info") |
+                    Q(description__icontains="info") |
+                    Q(entreprise__secteur__icontains="info") |
+                    Q(titre__icontains="cloud") |
+                    Q(description__icontains="cloud") |
+                    Q(titre__icontains="api") |
+                    Q(description__icontains="api"),
+                    then=Value(1)
+                ),
+
+                # 2) CYBER / SÉCURITÉ / RÉSEAUX
+                When(
+                    Q(titre__icontains="cyber") |
+                    Q(description__icontains="cyber") |
+                    Q(entreprise__secteur__icontains="cyber") |
+                    Q(titre__icontains="sécurité") |
+                    Q(description__icontains="sécurité") |
+                    Q(titre__icontains="security") |
+                    Q(description__icontains="security") |
+                    Q(titre__icontains="réseau") |
+                    Q(description__icontains="réseau") |
+                    Q(titre__icontains="reseau") |
+                    Q(description__icontains="reseau") |
+                    Q(titre__icontains="network") |
+                    Q(description__icontains="network") |
+                    Q(entreprise__secteur__icontains="réseau") |
+                    Q(entreprise__secteur__icontains="reseau") |
+                    Q(entreprise__secteur__icontains="network"),
+                    then=Value(2)
+                ),
+
+                default=Value(3),
                 output_field=IntegerField()
             )
         )
-        .order_by("priority", "-id")    
+        .order_by("priority", "-id") 
     )
 
     return render(request, "stages/offres_list.html", {"offres": offres})
