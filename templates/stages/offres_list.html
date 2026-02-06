@@ -314,6 +314,39 @@
       color: rgba(191,219,254,1);
       text-decoration: underline;
     }
+
+    /* ===================== ✅ COMPETENCES (ADDED ONLY) ===================== */
+    .skills-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: .92rem;
+      color: rgba(147,197,253,0.95);
+      user-select:none;
+      text-decoration: none;
+    }
+    .skills-toggle:hover{
+      color: rgba(191,219,254,1);
+      text-decoration: underline;
+    }
+    .skills-box{
+      padding: 12px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .skills-box ul{
+      margin: 0;
+      padding-left: 1.1rem;
+      color: rgba(255,255,255,0.74);
+    }
+    .skills-box li{
+      margin: 6px 0;
+      line-height: 1.25;
+    }
+    /* ===================================================================== */
   </style>
 </head>
 
@@ -386,9 +419,38 @@
                 {{ offre.description }}
               </p>
 
-              <span class="read-more mb-3" onclick="toggleDesc({{ offre.id }}, this)">
+              <span class="read-more mb-2" onclick="toggleDesc({{ offre.id }}, this)">
                 <i class="bi bi-chevron-down"></i> Lire la suite
               </span>
+              <!-- =============================================================================== -->
+
+              <!-- ===================== ✅ Compétences (ADDED ONLY) ===================== -->
+              {% if offre.competences %}
+                <div class="mb-3">
+                  <a class="skills-toggle"
+                     data-bs-toggle="collapse"
+                     href="#skills-{{ offre.id }}"
+                     role="button"
+                     aria-expanded="false"
+                     aria-controls="skills-{{ offre.id }}">
+                    <i class="bi bi-list-check"></i> Compétences
+                    <i class="bi bi-chevron-down ms-1" style="opacity:.9;"></i>
+                  </a>
+
+                  <div class="collapse mt-2" id="skills-{{ offre.id }}">
+                    <div class="skills-box">
+                      <div class="info-k mb-1">Compétences techniques</div>
+                      <ul>
+                        {% for skill in offre.competences.splitlines %}
+                          {% if skill.strip %}
+                            <li>{{ skill }}</li>
+                          {% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
               <!-- =============================================================================== -->
 
               <!-- Contacts -->
