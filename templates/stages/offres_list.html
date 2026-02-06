@@ -25,7 +25,7 @@
       --primary2:#8B5CF6;
 
       /* ✅ Purple “bared” for date */
-      --datePurple: rgba(167, 139, 250, 0.95); /* قريب لـ violet بارد */
+      --datePurple: rgba(167, 139, 250, 0.95);
       --datePurpleSoft: rgba(167, 139, 250, 0.22);
     }
 
@@ -290,7 +290,7 @@
     .desc-text{
       line-height: 1.55;
       display: -webkit-box;
-      -webkit-line-clamp: 3;          /* عدد السطور اللي كيبانو */
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
@@ -315,7 +315,7 @@
       text-decoration: underline;
     }
 
-    /* ===================== ✅ COMPETENCES (ADDED ONLY) ===================== */
+    /* ===================== ✅ COMPETENCES / LINKEDIN-LIKE SECTIONS (UNIFIED) ===================== */
     .skills-toggle{
       display:inline-flex;
       align-items:center;
@@ -407,7 +407,6 @@
                   </span>
                 {% endif %}
 
-                <!-- ✅ added meta-date class here (ONLY change in HTML) -->
                 <span class="meta-item meta-date">
                   <i class="bi bi-calendar-event"></i>
                   <span>{{ offre.date_debut }} → {{ offre.date_fin }}</span>
@@ -424,33 +423,80 @@
               </span>
               <!-- =============================================================================== -->
 
-              <!-- ===================== ✅ Compétences (ADDED ONLY) ===================== -->
-              {% if offre.competences %}
-                <div class="mb-3">
+              <!-- ===================== ✅ LinkedIn-like Sections (ADDED ONLY) ===================== -->
+              <div class="mb-3">
+
+                {% if offre.formation %}
+                  <a class="skills-toggle"
+                     data-bs-toggle="collapse"
+                     href="#formation-{{ offre.id }}"
+                     role="button"
+                     aria-expanded="false"
+                     aria-controls="formation-{{ offre.id }}">
+                    <i class="bi bi-mortarboard"></i> Formation
+                    <i class="bi bi-chevron-down ms-1" style="opacity:.9;"></i>
+                  </a>
+
+                  <div class="collapse mt-2" id="formation-{{ offre.id }}">
+                    <div class="skills-box">
+                      <ul>
+                        {% for item in offre.formation.splitlines %}
+                          {% if item.strip %}<li>{{ item }}</li>{% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="mt-2"></div>
+                {% endif %}
+
+                {% if offre.competences %}
                   <a class="skills-toggle"
                      data-bs-toggle="collapse"
                      href="#skills-{{ offre.id }}"
                      role="button"
                      aria-expanded="false"
                      aria-controls="skills-{{ offre.id }}">
-                    <i class="bi bi-list-check"></i> Compétences
+                    <i class="bi bi-list-check"></i> Compétences techniques
                     <i class="bi bi-chevron-down ms-1" style="opacity:.9;"></i>
                   </a>
 
                   <div class="collapse mt-2" id="skills-{{ offre.id }}">
                     <div class="skills-box">
-                      <div class="info-k mb-1">Compétences techniques</div>
                       <ul>
-                        {% for skill in offre.competences.splitlines %}
-                          {% if skill.strip %}
-                            <li>{{ skill }}</li>
-                          {% endif %}
+                        {% for item in offre.competences.splitlines %}
+                          {% if item.strip %}<li>{{ item }}</li>{% endif %}
                         {% endfor %}
                       </ul>
                     </div>
                   </div>
-                </div>
-              {% endif %}
+
+                  <div class="mt-2"></div>
+                {% endif %}
+
+                {% if offre.qualites %}
+                  <a class="skills-toggle"
+                     data-bs-toggle="collapse"
+                     href="#qualites-{{ offre.id }}"
+                     role="button"
+                     aria-expanded="false"
+                     aria-controls="qualites-{{ offre.id }}">
+                    <i class="bi bi-stars"></i> Qualités personnelles
+                    <i class="bi bi-chevron-down ms-1" style="opacity:.9;"></i>
+                  </a>
+
+                  <div class="collapse mt-2" id="qualites-{{ offre.id }}">
+                    <div class="skills-box">
+                      <ul>
+                        {% for item in offre.qualites.splitlines %}
+                          {% if item.strip %}<li>{{ item }}</li>{% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                {% endif %}
+
+              </div>
               <!-- =============================================================================== -->
 
               <!-- Contacts -->
