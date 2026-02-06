@@ -16,6 +16,7 @@ class Entreprise(models.Model):
 
 class Offre(models.Model):
     entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE)
+    competences = models.TextField(blank=True, null=True)  
     titre = models.CharField(max_length=255)
     description = models.TextField()
     date_debut = models.DateField()
