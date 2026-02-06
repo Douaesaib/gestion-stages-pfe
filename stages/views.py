@@ -1,11 +1,41 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
+from django.db.models import Q, Case, When, Value, IntegerField
 
 from .models import Offre, Candidature
 
 
 def offres_list(request):
-    offres = Offre.objects.select_related("entreprise").all().order_by("-id")
+    PRIORITY_KW = [
+        "informatique", "info", "it",
+        "dev", "dévelop", "develop", "developer", "software", "programm",
+        "web", "frontend", "backend", "full stack", "fullstack",
+        "data", "sql", "bi", "analytics", "machine", "ai", "ml",
+        "cyber", "sécurité", "security",
+        "réseau", "reseau", "network",
+        "cloud", "api", "devops",
+        "python", "java", "javascript", "typescript", "php", "node",
+        "django", "flask", "spring", "laravel", "react", "angular", "vue",
+        "c++", "c#", "dotnet"
+    ]
+
+    q = Q()
+    for kw in PRIORITY_KW:
+        q |= Q(titre__icontains=kw) | Q(description__icontains=kw) | Q(entreprise__secteur__icontains=kw)
+
+    offres = (
+        Offre.objects
+        .select_related("entreprise")
+        .annotate(
+            priority=Case(
+                When(q, then=Value(0)),   
+                default=Value(1),        
+                output_field=IntegerField()
+            )
+        )
+        .order_by("priority", "-id")    
+    )
+
     return render(request, "stages/offres_list.html", {"offres": offres})
 
 
