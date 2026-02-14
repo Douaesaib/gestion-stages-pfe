@@ -32,65 +32,74 @@
 
             <hr class="sidebar-divider my-0">
 
-            <li class="nav-item">
-                <a class="nav-link" href="/analytics/dashboard/"> 
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
+<li class="nav-item">
+    <a class="nav-link" href="/"> 
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+    </a>
+</li>
 
-            <hr class="sidebar-divider my-0">
+<hr class="sidebar-divider my-0">
 
-    {% if user.role == 'ADMIN' %}
-        <div class="sidebar-heading">Administration</div>
-        <li class="nav-item">
-            <a class="nav-link" href="/admin/">
-                <i class="fas fa-fw fa-user-shield"></i>
-                <span>Gérer les Utilisateurs</span>
-            </a>
-        </li>
+{% if user.role == 'ADMIN' or user.is_staff %}
+    <div class="sidebar-heading">Administration</div>
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/">
+            <i class="fas fa-fw fa-user-shield"></i>
+            <span>Gérer les Utilisateurs</span>
+        </a>
+    </li>
 
-    {% elif user.role == 'ETUDIANT' %}
-        <div class="sidebar-heading">Espace Stagiaire</div>
-        <li class="nav-item">
-            <a class="nav-link" href="/profil/">
-                <i class="fas fa-fw fa-user-graduate"></i>
-                <span>Mon Profil Académique</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/stages/offres/">
-                <i class="fas fa-fw fa-briefcase"></i>
-                <span>Offres de Stage</span>
-            </a>
-        </li>
+{% elif user.role == 'ETUDIANT' %}
+    <div class="sidebar-heading">Espace Stagiaire</div>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'modifier_profile' %}">
+            <i class="fas fa-fw fa-user-graduate"></i>
+            <span>Mon Profil Académique</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/stages/offres/">
+            <i class="fas fa-fw fa-briefcase"></i>
+            <span>Offres de Stage</span>
+        </a>
+    </li>
 
-    {% elif user.role == 'ENTREPRISE' %}
-        <div class="sidebar-heading">Espace Entreprise</div>
-        <li class="nav-item">
-            <a class="nav-link" href="/mes-offres/">
-                <i class="fas fa-fw fa-building"></i>
-                <span>Mes Offres</span>
-            </a>
-        </li>
-    {% endif %}
-     
-        {% if user.is_authenticated %}
-    {% if user.is_staff %}
-        <li>Dashboard Admin</li>
-    {% else %}
-        <li>Mon Profil Académique</li>
-    {% endif %}
-    {% endif %}
-            <hr class="sidebar-divider">
+{% elif user.role == 'ENTREPRISE' %}
+    <div class="sidebar-heading">Espace Entreprise</div>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'modifier_entreprise' %}">
+            <i class="fas fa-fw fa-building"></i>
+            <span>Profil Société</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="/mes-offres/">
+            <i class="fas fa-fw fa-list"></i>
+            <span>Mes Offres</span>
+        </a>
+    </li>
+{% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link" href="/analytics/recommandations/">
-                    <i class="fas fa-fw fa-robot"></i>
-                    <span>Recommandations IA</span>
-                </a>
-            </li>
+<hr class="sidebar-divider">
 
+<li class="nav-item">
+    <a class="nav-link" href="/analytics/recommandations/">
+        <i class="fas fa-fw fa-robot"></i>
+        <span>Recommandations IA</span>
+    </a>
+</li>
+<hr class="sidebar-divider">
+
+<li class="nav-item">
+    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+        {% csrf_token %}
+    </form>
+    <a class="nav-link " href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+        <i class="fas fa-fw fa-sign-out-alt"></i>
+        <span style ="color: white;">Se déconnecter</span>
+    </a>
+</li>
             <hr class="sidebar-divider d-none d-md-block">
 
             <div class="text-center d-none d-md-inline">
