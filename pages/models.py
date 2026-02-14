@@ -17,7 +17,13 @@ class Etudiant(models.Model):
     cv = models.FileField(upload_to='cvs/', null=True, blank=True)
 
 class Entreprise(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'role': 'ENTREPRISE'})
-    nom_entreprise = models.CharField(max_length=100)
-    ville = models.CharField(max_length=50)
-    ice = models.CharField(max_length=20)
+   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='entreprise')
+   nom_societe = models.CharField(max_length=100)
+   secteur = models.CharField(max_length=100)
+   ville = models.CharField(max_length=50)
+   description = models.TextField(blank=True)
+   site_web = models.URLField(blank=True)
+
+   def __str__(self):
+        return self.nom_societe
+   

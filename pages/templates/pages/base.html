@@ -74,7 +74,14 @@
             </a>
         </li>
     {% endif %}
-
+     
+        {% if user.is_authenticated %}
+    {% if user.is_staff %}
+        <li>Dashboard Admin</li>
+    {% else %}
+        <li>Mon Profil Académique</li>
+    {% endif %}
+    {% endif %}
             <hr class="sidebar-divider">
 
             <li class="nav-item">
