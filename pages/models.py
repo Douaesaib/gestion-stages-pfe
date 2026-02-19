@@ -14,7 +14,13 @@ class Etudiant(models.Model):
     cne = models.CharField(max_length=20)
     filiere = models.CharField(max_length=100)
     telephone = models.CharField(max_length=15)
-    cv = models.FileField(upload_to='cvs/', null=True, blank=True)
+    ecole = models.CharField(max_length=150)
+    niveau_etudes = models.CharField(max_length=50) 
+    competences = models.TextField()
+    experiences = models.TextField(blank=True, null=True)
+    projets = models.TextField()
+    cv_file = models.FileField(upload_to='cvs/', blank=True, null=True)
+    
 
 class Entreprise(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='entreprise')

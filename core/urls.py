@@ -29,4 +29,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('modifier-entreprise/', views.modifier_entreprise, name='modifier_entreprise'),
     path('profil/', views.modifier_profile, name='modifier_profile'),
+    path('cv/', views.remplir_cv, name='cv'),
 ]

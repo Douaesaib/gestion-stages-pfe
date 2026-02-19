@@ -12,7 +12,7 @@ def signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save
+            user = form.save()
             auth_login(request, user) 
             if user.role == 'ETUDIANT':
                 return redirect('modifier_profile')
@@ -58,3 +58,26 @@ def modifier_entreprise(request):
         form = EntrepriseProfileForm(instance=entreprise)
         
     return render(request, 'pages/modifier_entreprise.html', {'form': form})
+
+@login_required
+def remplir_cv(request):
+    try:
+        etudiant = request.user.etudiant
+    except Etudiant.DoesNotExist:
+        etudiant = None
+
+    if request.method == 'POST':
+        form = EtudiantProfileForm(request.POST, request.FILES, instance=etudiant)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user = request.user
+            profile.save()
+
+            raw_skills = form.cleaned_data['competences']
+            skills_list = [s.strip().lower() for s in raw_skills.split(',')]
+            
+            return redirect('success_url')
+    else:
+        form = EtudiantProfileForm(instance=etudiant)
+        
+    return render(request, 'cv.html', {'form': form})
