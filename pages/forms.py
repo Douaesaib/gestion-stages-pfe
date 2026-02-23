@@ -15,11 +15,10 @@ class EtudiantProfileForm(forms.ModelForm):
         fields = ['cne', 'filiere', 'telephone', 'ecole', 'niveau_etudes', 'competences', 'experiences', 'projets', 'cv_file']
         widgets = {
             'cne': forms.TextInput(attrs={'class': 'form-control'}),
-            'filiere': forms.TextInput(attrs={'class': 'form-control'}),
             'telephone': forms.TextInput(attrs={'class': 'form-control'}),
             'ecole': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ecole / Université'}),
             'filiere': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Filière'}),
-            'competences': forms.TextInput(attrs={'class': 'form-control', 'id': 'id_competences', 'placeholder': 'Python, Java, SQL...'}),
+            'competences': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Python, Java, SQL...'}),
             'projets': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description de vos projets'}),
             'experiences': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Stages ou expériences passées'}),
             'cv_file': forms.FileInput(attrs={'class': 'form-control'}),

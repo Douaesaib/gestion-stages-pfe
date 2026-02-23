@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import EtudiantProfileForm , SignUpForm
+from .forms import EtudiantProfileForm , EntrepriseProfileForm, SignUpForm
 from .models import Etudiant,Entreprise
 
 
