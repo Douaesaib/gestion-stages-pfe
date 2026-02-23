@@ -132,3 +132,5 @@ pymysql.install_as_MySQLdb()
 AUTH_USER_MODEL = 'pages.User'
 LOGIN_REDIRECT_URL = 'home'  
 LOGOUT_REDIRECT_URL = 'login'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
