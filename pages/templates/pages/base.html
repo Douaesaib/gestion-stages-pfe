@@ -38,9 +38,7 @@
         <span>Dashboard</span>
     </a>
 </li>
-<li class="nav-item">
-    <span class="nav-link" style="color: yellow;">DEBUG: {{ user.username }} - {{ user.role }}</span>
-</li>
+
 <hr class="sidebar-divider my-0">
 
 {% if user.role == 'ADMIN' or user.is_staff %}
