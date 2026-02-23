@@ -38,7 +38,9 @@
         <span>Dashboard</span>
     </a>
 </li>
-
+<li class="nav-item">
+    <span class="nav-link" style="color: yellow;">DEBUG: {{ user.username }} - {{ user.role }}</span>
+</li>
 <hr class="sidebar-divider my-0">
 
 {% if user.role == 'ADMIN' or user.is_staff %}
@@ -50,7 +52,7 @@
         </a>
     </li>
 
-{% elif user.role == 'ETUDIANT' %}
+{% elif user.role|upper == 'ETUDIANT' %}
     <div class="sidebar-heading">Espace Stagiaire</div>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'modifier_profile' %}">

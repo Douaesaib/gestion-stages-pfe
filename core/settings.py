@@ -130,5 +130,5 @@ pymysql.install_as_MySQLdb()
 
 
 AUTH_USER_MODEL = 'pages.User'
-LOGIN_REDIRECT_URL = 'index'  
+LOGIN_REDIRECT_URL = 'home'  
 LOGOUT_REDIRECT_URL = 'login'
