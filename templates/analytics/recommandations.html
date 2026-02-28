@@ -88,7 +88,7 @@
                                         {% if offre.score_calcule >= 60 %} text-success 
                                         {% elif offre.score_calcule >= 30 %} text-warning 
                                         {% else %} text-danger {% endif %}">
-                                        {{ offre.score_calcule|floatform:1 }}%
+                                        {{ offre.score_calcule|floatformat:1 }}%
                                     </div>
 
                                     <div class="progress mb-3" style="height: 10px;">
@@ -101,8 +101,8 @@
                                         </div>
                                     </div>
 
-                                    <a href="{% url 'stages:postuler' offre.id %}" class="btn btn-outline-primary w-100">
-                                        Voir & Postuler <i class="fas fa-arrow-right"></i>
+                                    <a href="{% url 'stages:detail_offre' offre.id %}" class="btn btn-outline-primary w-100">
+                                         Voir & Postuler <i class="fas fa-arrow-right"></i>
                                     </a>
                                 </div>
                             </div>

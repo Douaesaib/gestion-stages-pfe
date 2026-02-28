@@ -11,7 +11,7 @@ def dashboard_view(request):
     #en remplace plus tard par Stagiaire.objects.count()
     context = {
         'nb_stagiaires': Stagiaire.objects.count(),
-        'nb_entreprise': Entreprise.objects.count(),
+        'nb_entreprises': Entreprise.objects.count(),
         'nb_offres': Offre.objects.count(),
         'nb_convention': 98,
     }
@@ -38,18 +38,18 @@ def demo_ai_view(request):
     score = None
     cv_text = ""
     offre_text = ""
-    color = "red" # Couleur par défaut
+    color = "red" #
 
     if request.method == 'POST':
-        # On récupère le texte tapé par l'utilisateur
+        
         cv_text = request.POST.get('cv_text', '')
         offre_text = request.POST.get('offre_text', '')
         
-        # On lance l'IA
+       
         if cv_text and offre_text:
             score = calculer_score_matching(cv_text, offre_text)
             
-            # Petite logique pour la couleur
+            
             if score < 30:
                 color = "#dc3545" # Rouge
             elif score < 60:
@@ -80,14 +80,21 @@ def recommandations_view(request):
     offres_recommandees = []
 
     for offre in offres_db:
-        texte_a_analyser = f"{offre.titre} {offre.description}"
+
+        competences_offre = getattr(offre, 'competences', None)
+
+        if competences_offre and competences_offre.strip():
+            
+            texte_a_analyser = competences_offre
+        else:
+            texte_a_analyser = f"{offre.titre} {offre.description}"
         
         score = calculer_score_matching(mes_competences, texte_a_analyser)
         
         offre.score_calcule = score
         
-        if score > 20:
-            offres_recommandees.append(offre)
+        
+        offres_recommandees.append(offre)
 
     offres_recommandees.sort(key=lambda x: x.score_calcule, reverse=True)
 
