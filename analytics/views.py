@@ -2,18 +2,17 @@ from django.shortcuts import render
 from .utils_pdf import generer_pdf_convention
 from django.http import FileResponse, HttpResponse
 from .ai_matching import calculer_score_matching
-from stages.models import Offre, Entreprise
+from stages.models import Offre, Entreprise, Candidature
 from django.contrib.auth.decorators import login_required
-from users.models import Stagiaire
+from pages.models import Etudiant
 
 @login_required
 def dashboard_view(request):
-    #en remplace plus tard par Stagiaire.objects.count()
     context = {
-        'nb_stagiaires': Stagiaire.objects.count(),
+        'nb_etudiants': Etudiant.objects.count(),
         'nb_entreprises': Entreprise.objects.count(),
         'nb_offres': Offre.objects.count(),
-        'nb_convention': 98,
+        'nb_convention': Candidature.objects.count(),
     }
     return render(request, 'analytics/dashboard.html', context)
 
@@ -69,10 +68,10 @@ def demo_ai_view(request):
 @login_required
 def recommandations_view(request):
     try:
-        le_stagiaire = Stagiaire.objects.get(user=request.user)
-        mes_competences = le_stagiaire.competences
+        le_etudiant = Etudiant.objects.get(user=request.user)
+        mes_competences = le_etudiant.competences
         nom_complet = f"{request.user.first_name} {request.user.last_name}"
-    except Stagiaire.DoesNotExist:
+    except Etudiant.DoesNotExist:
         mes_competences = "Python, Django, SQL"
         nom_complet = "Administrateur"
 
