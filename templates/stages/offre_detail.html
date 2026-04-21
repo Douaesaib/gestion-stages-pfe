@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">{{ offre.titre }}</h2>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-muted"><i class="fas fa-building"></i> {{ offre.entreprise.nom_societe }}</h5>
+                    <p><i class="fas fa-map-marker-alt text-danger"></i> {{ offre.lieu }}</p>
+                    <hr>
+                    
+                    <h4>Description du poste</h4>
+                    <p class="card-text">{{ offre.description|linebreaks }}</p>
+
+                    {% if offre.competences %}
+                    <h4 class="mt-4">Compétences requises</h4>
+                    <p>{{ offre.competences|linebreaks }}</p>
+                    {% endif %}
+
+                    <div class="mt-5 d-flex justify-content-between">
+                        <a href="{% url 'stages:offres_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Retour aux offres
+                        </a>
+                        <a href="{% url 'stages:postuler' offre.id %}" class="btn btn-success btn-lg">
+                            Postuler maintenant <i class="fas fa-paper-plane"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
