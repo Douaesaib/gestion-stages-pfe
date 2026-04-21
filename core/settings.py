@@ -17,6 +17,8 @@ ALLOWED_HOSTS = []
 # Applications installées
 INSTALLED_APPS = [
     "pages",
+    "stages",
+    "analytics",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -98,6 +100,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 # Configuration Utilisateur et Auth
 AUTH_USER_MODEL = 'pages.User'
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = 'home'  
 LOGOUT_REDIRECT_URL = 'login'
 

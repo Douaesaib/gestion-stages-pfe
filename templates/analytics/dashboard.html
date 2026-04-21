@@ -9,7 +9,7 @@
             <div class="card text-white bg-primary mb-3">
                 <div class="card-header">Stagiaires Inscrits</div>
                 <div class="card-body">
-                    <h1 class="card-title">{{ nb_stagiaires }}</h1>
+                    <h1 class="card-title">{{ nb_etudiants }}</h1>
                 </div>
             </div>
         </div>
@@ -27,15 +27,15 @@
             <div class="card text-white bg-warning mb-3">
                 <div class="card-header">Conventions Signées</div>
                 <div class="card-body">
-                    <h1 class="card-title">{{ nb_conventions }}</h1>
+                    <h1 class="card-title">{{ nb_convention }}</h1>
                 </div>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <a href="{% url 'analytics:convention' %}" class="btn btn-success btn-lg">
-        <i class="fas fa-file-pdf"></i> Télécharger Ma Convention
-    </a>
-</div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="{% url 'analytics:convention' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-file-pdf"></i> Télécharger Ma Convention
+        </a>
     </div>
 </div>
 {% endblock %}
