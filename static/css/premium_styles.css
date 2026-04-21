@@ -202,6 +202,57 @@ h1, h2, h3, h4, h5, h6 {
 .bg-gradient-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
 
 /* Sidebar overrides */
-.sidebar-dark .nav-item .nav-link { font-family: 'Outfit', sans-serif; font-size: 1rem; }
-.bg-gradient-primary { background: var(--secondary-color); }
+@keyframes shine {
+    0% { left: -150%; }
+    20% { left: 150%; }
+    100% { left: 150%; }
+}
+
+.sidebar-dark {
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-gradient-primary { 
+    background: linear-gradient(135deg, var(--primary-color) 0%, #8728cc 50%, #3b28cc 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+    z-index: 1;
+}
+
+.bg-gradient-primary::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -150%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    transform: skewX(-20deg);
+    animation: shine 6s infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.sidebar-dark .nav-item .nav-link { 
+    font-family: 'Outfit', sans-serif; 
+    font-size: 1rem; 
+    color: rgba(255,255,255,0.7) !important;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: 12px;
+    margin: 4px 12px;
+    padding: 12px 15px;
+}
+
+.sidebar-dark .nav-item .nav-link:hover, .sidebar-dark .nav-item.active .nav-link {
+    background: rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    transform: translateX(8px);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+}
+
+.sidebar-dark .sidebar-brand {
+    position: relative;
+    z-index: 2;
+}
 
