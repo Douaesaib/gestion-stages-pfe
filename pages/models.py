@@ -22,6 +22,7 @@ class Etudiant(models.Model):
     cv_file = models.FileField(upload_to='cvs/', blank=True, null=True)
     
 
+
 class Entreprise(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='entreprise')
    nom_societe = models.CharField(max_length=100)
