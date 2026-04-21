@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .utils_pdf import generer_pdf_convention
 from django.http import FileResponse, HttpResponse
 from .ai_matching import calculer_score_matching
@@ -8,6 +8,9 @@ from pages.models import Etudiant
 
 @login_required
 def dashboard_view(request):
+    if getattr(request.user, 'role', '') != 'ADMIN' and not getattr(request.user, 'is_staff', False):
+        return redirect('home')
+        
     context = {
         'nb_etudiants': Etudiant.objects.count(),
         'nb_entreprises': Entreprise.objects.count(),
