@@ -156,3 +156,8 @@ def postuler(request, offre_id):
         return redirect("stages:offres_list")
 
     return render(request, "stages/postuler.html", {"offre": offre})
+def offre_detail(request, offre_id):
+    # كنجيبو العرض بـ ID ديالو، وإلا مالقاهش كيعطي صفحة 404
+    offre = get_object_or_404(Offre, id=offre_id)
+    
+    return render(request, "stages/offre_detail.html", {"offre": offre})
