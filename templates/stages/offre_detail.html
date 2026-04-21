@@ -1,37 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">{{ offre.titre }}</h2>
-                </div>
-                <div class="card-body">
-                    <h5 class="text-muted"><i class="fas fa-building"></i> {{ offre.entreprise.nom_societe }}</h5>
-                    <p><i class="fas fa-map-marker-alt text-danger"></i> {{ offre.lieu }}</p>
-                    <hr>
-                    
-                    <h4>Description du poste</h4>
-                    <p class="card-text">{{ offre.description|linebreaks }}</p>
+<div class="row min-vh-75 py-5 position-relative z-1">
+    <div class="col-xl-8 col-lg-10 mx-auto animate-fade-in delay-1">
+        
+        <div class="mb-4">
+            <a href="{% url 'stages:offres_list' %}" class="btn btn-outline-secondary btn-sm shadow-sm rounded-pill px-3">
+                <i class="fas fa-arrow-left me-2"></i> Retour aux offres
+            </a>
+        </div>
 
-                    {% if offre.competences %}
-                    <h4 class="mt-4">Compétences requises</h4>
-                    <p>{{ offre.competences|linebreaks }}</p>
+        <div class="card card-premium shadow-lg border-0 overflow-hidden">
+            <div class="card-header bg-white border-bottom p-5 position-relative">
+                <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary opacity-10" style="background: linear-gradient(135deg, rgba(0,240,255,0.05) 0%, rgba(59,40,204,0.05) 100%);"></div>
+                
+                <h1 class="display-6 fw-bold text-dark mb-3 position-relative z-1">{{ offre.titre }}</h1>
+                <div class="d-flex align-items-center gap-4 text-muted position-relative z-1">
+                    <span class="fs-5 text-primary fw-medium"><i class="fas fa-building me-2"></i> {{ offre.entreprise.nom_societe|default:offre.entreprise.nom }}</span>
+                    {% if offre.lieu %}
+                    <span><i class="fas fa-map-marker-alt text-danger me-2"></i> {{ offre.lieu }}</span>
                     {% endif %}
+                </div>
+            </div>
+            
+            <div class="card-body p-5">
+                <h4 class="fw-bold mb-3"><i class="fas fa-file-alt text-accent me-2"></i> Description du poste</h4>
+                <div class="card-text text-muted mb-5" style="line-height: 1.8;">
+                    {{ offre.description|linebreaks }}
+                </div>
 
-                    <div class="mt-5 d-flex justify-content-between">
-                        <a href="{% url 'stages:offres_list' %}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Retour aux offres
-                        </a>
-                        <a href="{% url 'stages:postuler' offre.id %}" class="btn btn-success btn-lg">
-                            Postuler maintenant <i class="fas fa-paper-plane"></i>
-                        </a>
-                    </div>
+                {% if offre.competences %}
+                <h4 class="fw-bold mb-3"><i class="fas fa-laptop-code text-info me-2"></i> Compétences requises</h4>
+                <div class="card-text text-muted mb-5" style="line-height: 1.8;">
+                    {{ offre.competences|linebreaks }}
+                </div>
+                {% endif %}
+
+                <hr class="my-4 border-muted">
+                
+                <div class="text-center">
+                    <a href="{% url 'stages:postuler' offre.id %}" class="btn btn-primary-custom btn-lg px-5 py-3 shadow-lg rounded-pill" style="font-size: 1.1rem;">
+                        <i class="fas fa-paper-plane me-2"></i> Postuler maintenant
+                    </a>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 {% endblock %}

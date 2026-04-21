@@ -1,0 +1,207 @@
+/* 
+===============================================
+   HYPER-PREMIUM STYLES FOR GESTION STAGES PFE
+===============================================
+*/
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+    --primary-color: #3b28cc;
+    --primary-hover: #4e3ae3;
+    --secondary-color: #0b0914;
+    --accent-color: #00f0ff;
+    --bg-color: #f4f5f9;
+    --card-bg: rgba(255, 255, 255, 0.8);
+    --text-main: #141724;
+    --text-muted: #5e6680;
+    
+    --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 20px 40px rgba(59, 40, 204, 0.15);
+    --shadow-glow: 0 0 25px rgba(0, 240, 255, 0.5);
+    
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 30px;
+    
+    --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+/* =========================================
+   Animations & "WOW" Effects
+========================================= */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+.text-gradient {
+    background: linear-gradient(270deg, var(--primary-color), var(--accent-color), #bc00dd);
+    background-size: 200% 200%;
+    animation: gradient-shift 6s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent; /* Fallback */
+}
+
+/* =========================================
+   Navbar & Glassmorphism
+========================================= */
+.navbar-glass {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 1rem 0;
+    transition: var(--transition);
+}
+
+/* Base template has navbar-dark by default, let's make it adapted for light premium bg */
+.navbar-glass .navbar-brand {
+    color: var(--secondary-color) !important;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+.navbar-glass .nav-link {
+    color: var(--text-main) !important;
+    font-weight: 600;
+}
+
+/* =========================================
+   Buttons & Inputs
+========================================= */
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #8728cc 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(59, 40, 204, 0.3);
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 25px rgba(59, 40, 204, 0.4);
+    color: white;
+}
+
+.form-control-custom {
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 0.8rem 1.2rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), var(--shadow-sm);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.form-control-custom:focus {
+    background-color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: var(--shadow-glow);
+    outline: none;
+}
+
+/* =========================================
+   Cards Structure
+========================================= */
+.card-premium {
+    background: var(--card-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* =========================================
+   Dashboard (Stat Cards)
+========================================= */
+.stat-card {
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border: none;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.stat-card:hover::after {
+    opacity: 1;
+}
+
+.bg-gradient-blue { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+.bg-gradient-green { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
+.bg-gradient-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+/* Sidebar overrides */
+.sidebar-dark .nav-item .nav-link { font-family: 'Outfit', sans-serif; font-size: 1rem; }
+.bg-gradient-primary { background: var(--secondary-color); }
+

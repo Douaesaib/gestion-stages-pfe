@@ -5,28 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion Stages PFE</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    {% load static %}
+    <link href="{% static 'css/premium_styles.css' %}" rel="stylesheet">
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-glass mb-4 sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">🎓 PFE Manager</a>
-            <div class="collapse navbar-collapse">
+            <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-graduation-cap text-accent me-2"></i>PFE Manager</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Accueil</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'stages:offres_list' %}">Offres</a></li>
-                    {% if user.role == 'ADMIN' or user.is_staff %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'analytics:dashboard' %}">Dashboard</a></li>
+                    
+                    {% if user.is_authenticated %}
+                        {% if user.role == 'ADMIN' or user.is_staff %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'analytics:dashboard' %}"><i class="fas fa-chart-pie me-1 text-accent"></i> Dashboard Admin</a></li>
+                        {% elif user.role == 'ETUDIANT' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'analytics:recommandations' %}"><i class="fas fa-magic me-1 text-warning"></i> Recommandations IA</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'modifier_profile' %}"><i class="fas fa-user-graduate me-1 text-accent"></i> Mon Espace</a></li>
+                        {% elif user.role == 'ENTREPRISE' %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'modifier_entreprise' %}"><i class="fas fa-building me-1 text-accent"></i> Espace Entreprise</a></li>
+                        {% endif %}
                     {% endif %}
                 </ul>
-                <div class="d-flex">
+                <div class="d-flex ms-lg-3 mt-3 mt-lg-0">
                     {% if user.is_authenticated %}
                         <form method="post" action="{% url 'logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Déconnexion</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm px-4 rounded-pill">Déconnexion</button>
                         </form>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Connexion</a>
+                        <a href="{% url 'login' %}" class="btn btn-primary-custom btn-sm px-4 rounded-pill">Connexion</a>
                     {% endif %}
                 </div>
             </div>
@@ -38,9 +52,12 @@
         {% endblock %}
     </main>
 
-    <footer class="text-center mt-5 py-3 bg-light">
-        <p class="text-muted">© 2026 Faculté des Sciences Tétouan - Gestion Stages</p>
+    <footer class="text-center mt-5 py-4 bg-white border-top">
+        <div class="container">
+            <p class="text-muted mb-0 fw-medium">© 2026 Faculté des Sciences Tétouan - <span class="text-primary">Gestion Stages Premium</span></p>
+        </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

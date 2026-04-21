@@ -1,15 +1,75 @@
-{% extends 'pages/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
-Accueil
+Accueil - PFE Manager
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <h1 class="text-center">Bienvenue dans la plateforme de gestion des stages</h1>
+<div class="position-absolute w-100 h-100 top-0 start-0 overflow-hidden" style="z-index: -2;">
+    <!-- Abstract background color -->
+    <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: radial-gradient(circle at 10% 20%, rgba(59, 40, 204, 0.05) 0%, transparent 50%);"></div>
+    
+    <!-- Moving glowing blobs via inline style & css keyframes -->
+    <div class="rounded-circle blur-shadow" style="position: absolute; top: -10%; left: 40%; width: 50vw; height: 50vw; background: linear-gradient(135deg, #00f0ff 0%, #3b28cc 100%); filter: blur(120px); opacity: 0.15; animation: float 15s ease-in-out infinite alternate;"></div>
+    
+    <div class="rounded-circle blur-shadow" style="position: absolute; bottom: -20%; right: 10%; width: 40vw; height: 40vw; background: linear-gradient(135deg, #bc00dd 0%, #3b28cc 100%); filter: blur(100px); opacity: 0.15; animation: float 20s ease-in-out infinite alternate-reverse;"></div>
+</div>
 
-  <p class="text-center mt-3">
-    Cette plateforme permet de gérer les stages des étudiants.
-  </p>
+<div class="row align-items-center min-vh-75 py-5 position-relative">
+    <div class="col-lg-6 mb-5 mb-lg-0 text-center text-lg-start z-1">
+        <div class="badge bg-white text-primary rounded-pill px-4 py-2 mb-4 shadow-sm animate-fade-in" style="font-weight: 600; letter-spacing: 1px;"><i class="fas fa-sparkles me-2 text-warning"></i> NOUVELLE VERSION 2.0</div>
+        
+        {% if not user.is_authenticated %}
+        <h1 class="display-3 fw-bold mb-4 text-dark animate-fade-in delay-1" style="line-height: 1.1;">L'Avenir de la Gestion des <br/><span class="text-gradient">Stages PFE</span></h1>
+        
+        <p class="lead text-muted mb-5 animate-fade-in delay-2" style="font-size: 1.25rem;">Connectez facilement les étudiants, les entreprises et les encadrants académiques. Simplifiez vos démarches, générez des conventions automatiquement et utilisez l'IA pour trouver le match parfait.</p>
+        
+        <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-4 animate-fade-in delay-3">
+            <a href="{% url 'signup' %}" class="btn btn-primary-custom btn-lg px-5 py-3 rounded-pill shadow-lg">
+                Démarrer Maintenant <i class="fas fa-rocket ms-2"></i>
+            </a>
+            <a href="{% url 'login' %}" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill" style="border-width: 2px; font-weight: 700;">
+                <i class="fas fa-lock me-2"></i> Connexion
+            </a>
+        </div>
+        {% else %}
+        <h1 class="display-3 fw-bold mb-4 text-dark animate-fade-in delay-1" style="line-height: 1.1;">Ravi de vous revoir,<br/><span class="text-gradient">{{ user.username|title }} 🌟</span></h1>
+        
+        <p class="lead text-muted mb-5 animate-fade-in delay-2" style="font-size: 1.25rem;">Bienvenue dans votre PFE Manager privé. Gérez vos démarches, accédez à vos offres et consultez vos recommandations intelligentes instantanément.</p>
+        
+        <div class="d-flex flex-column flex-sm-row justify-content-center justify-content-lg-start gap-4 animate-fade-in delay-3">
+            {% if user.role == 'ADMIN' or user.is_staff %}
+            <a href="{% url 'analytics:dashboard' %}" class="btn btn-primary-custom btn-lg px-5 py-3 rounded-pill shadow-lg">
+                Aller au Dashboard <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            {% elif user.role == 'ETUDIANT' %}
+            <a href="{% url 'modifier_profile' %}" class="btn btn-primary-custom btn-lg px-5 py-3 rounded-pill shadow-lg">
+                Accéder à mon Espace <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            {% elif user.role == 'ENTREPRISE' %}
+            <a href="{% url 'modifier_entreprise' %}" class="btn btn-primary-custom btn-lg px-5 py-3 rounded-pill shadow-lg">
+                Accéder à l'Espace Entreprise <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+            {% endif %}
+            <a href="{% url 'stages:offres_list' %}" class="btn btn-outline-dark btn-lg px-5 py-3 rounded-pill" style="border-width: 2px; font-weight: 700;">
+                <i class="fas fa-search me-2"></i> Explorer les Offres
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-lg-6 z-1">
+        <div class="position-relative animate-fade-in delay-2" style="perspective: 1000px;">
+            <div class="card card-premium shadow-lg border-0 overflow-hidden" style="transform: rotateY(-5deg) rotateX(5deg); transition: transform 0.5s ease;">
+                <div class="card-body p-5 text-center bg-white" style="background: rgba(255,255,255,0.7) !important;">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-4" style="width: 100px; height: 100px; background: linear-gradient(135deg, #00f0ff 0%, #3b28cc 100%); box-shadow: 0 10px 20px rgba(0, 240, 255, 0.4);">
+                        <i class="fas fa-brain fa-3x text-white"></i>
+                    </div>
+                    <h3 class="h2 fw-bold mb-3 text-dark">Propulsé par l'IA</h3>
+                    <p class="text-muted mb-0 fs-5">Notre algorithme intelligent analyse votre profil et vous connecte aux entreprises offrant les stages les plus adaptés à vos compétences de manière instantanée.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
