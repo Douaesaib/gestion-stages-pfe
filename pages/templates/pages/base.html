@@ -83,12 +83,14 @@
 
 <hr class="sidebar-divider">
 
+{% if user.role|upper == 'ETUDIANT' %}
 <li class="nav-item">
     <a class="nav-link" href="/analytics/recommandations/">
         <i class="fas fa-fw fa-robot"></i>
         <span>Recommandations IA</span>
     </a>
 </li>
+{% endif %}
 <hr class="sidebar-divider">
 
 <li class="nav-item">
