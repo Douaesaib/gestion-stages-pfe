@@ -16,20 +16,18 @@ def generer_pdf_convention(stagiaire_nom="ETUDIANT INCONNU", entreprise_nom="ENT
     logo_path = os.path.join(settings.BASE_DIR, 'analytics', 'images', 'logo_fac.jpg')
     
     if os.path.exists(logo_path):
-        # Qbel kant (height - 3.5), db rddinaha (height - 5.0) bash yhbet
         p.drawImage(logo_path, 1.5 * cm, height - 7.5 * cm, width=2.5*cm, preserveAspectRatio=True, mask='auto')
 
     # Titre de l'Université (Centré)
     p.setFillColor(black)
     p.setFont("Helvetica-Bold", 14)
-    # Hna kan-l3bu b l'rtifa3 (height - X) bash nqadu l'ktaba
     p.drawCentredString(width / 2, height - 3.0 * cm, "ROYAUME DU MAROC")
     
     p.setFont("Helvetica", 11)
     p.drawCentredString(width / 2, height - 3.6 * cm, "Université Abdelmalek Essaâdi")
     p.drawCentredString(width / 2, height - 4.2 * cm, "Faculté des Sciences - Tétouan")
 
-    # Ligne de séparation (Zrqqa) - Hta hiya hbbtha bash tji taht l'logo
+    # Ligne de séparation 
     p.setLineWidth(1)
     p.setStrokeColor(blue)
     p.line(1.5 * cm, height - 5.5 * cm, width - 1.5 * cm, height - 5.5 * cm)
