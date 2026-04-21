@@ -1,12 +1,22 @@
+import os
 from pathlib import Path
+import pymysql
 
+# Correction pour la compatibilité MySQL avec Django
+pymysql.version_info = (2, 2, 7, "final", 0)
+pymysql.install_as_MySQLdb()
+
+# Chemins de base
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Sécurité (À changer en production !)
 SECRET_KEY = "django-insecure-change-this-in-production"
 DEBUG = True
 ALLOWED_HOSTS = []
 
+# Applications installées
 INSTALLED_APPS = [
+    "pages",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -34,6 +44,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -44,7 +55,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-# ✅ Database (MySQL)
+# ✅ Configuration Base de données (MySQL)
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
@@ -56,11 +67,11 @@ DATABASES = {
         "OPTIONS": {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
             "charset": "utf8mb4",
-            "use_unicode": True,
         },
     }
 }
 
+# Validation des mots de passe
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -68,16 +79,30 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# Internationalisation
 LANGUAGE_CODE = "fr-fr"
 TIME_ZONE = "Africa/Casablanca"
 USE_I18N = True
 USE_TZ = True
 
+# Fichiers Statiques et Médias
 STATIC_URL = "static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+    BASE_DIR / "pages" / "static",
+]
 
-MEDIA_URL = "media/"
+MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Configuration Utilisateur et Auth
+AUTH_USER_MODEL = 'pages.User'
+LOGIN_REDIRECT_URL = 'home'  
+LOGOUT_REDIRECT_URL = 'login'
+
+# Email (Mode console pour le développement)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Divers
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

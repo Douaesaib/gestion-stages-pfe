@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Mon Profil & Compétences</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">École / Université</label>
+                        {{ form.ecole }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Filière</label>
+                        {{ form.filiere }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Compétences (Hard Skills)</label>
+                    {{ form.competences }}
+                </div>
+                    <small class="text-muted">Séparez vos compétences par des virgules.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Projets Réalisés</label>
+                    {{ form.projets }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Expériences / Stages</label>
+                    {{ form.experiences }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Importer votre CV (PDF)</label>
+                    {{ form.cv_pdf }}
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-success">Enregistrer mon Profil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+{% endblock %}
