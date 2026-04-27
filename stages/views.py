@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.db.models import Q, Case, When, Value, IntegerField
+from django.contrib.auth.decorators import login_required
 
 from .models import Offre, Candidature
 
@@ -161,3 +162,16 @@ def offre_detail(request, offre_id):
     offre = get_object_or_404(Offre, id=offre_id)
     
     return render(request, "stages/offre_detail.html", {"offre": offre})
+@login_required
+def mes_offres(request):
+    if request.user.role != 'ENTREPRISE':
+        messages.error(request, "Accès réservé aux entreprises.")
+        return redirect('home')
+    
+    # 1. Kan-akhdou s-smia dyal ch-charika mn l'profil dyal l'utilisateur
+    nom_charika = request.user.entreprise.nom_societe
+    
+    # 2. Kan-jbdou l'offres li smit l'entreprise dyalha (nom) kat-chbah l had s-smia
+    offres = Offre.objects.filter(entreprise__nom=nom_charika).order_by('-id')
+    
+    return render(request, "stages/offres_list.html", {"offres": offres})
