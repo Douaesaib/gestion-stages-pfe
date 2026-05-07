@@ -6,9 +6,17 @@
 <div class="row min-vh-75 py-5 position-relative z-1">
     
     <div class="col-12 text-center mb-5 animate-fade-in">
-        <h1 class="display-5 fw-bold text-dark">Découvrez les <span class="text-gradient">Offres de Stage</span></h1>
-        <p class="lead text-muted mt-3">Trouvez rapidement l'offre qui correspond à votre profil LinkedIn, consultez les informations et postulez en 1 clic.</p>
-    </div>
+            <h1 class="display-5 fw-bold text-dark">Découvrez les <span class="text-gradient">Offres de Stage</span></h1>
+            <p class="lead text-muted mt-3">Trouvez rapidement l'offre qui correspond à votre profil LinkedIn, consultez les informations et postulez en 1 clic.</p>
+            
+            {% if user.role == 'ENTREPRISE' %}
+            <div class="mt-4">
+                <a href="{% url 'stages:ajouter_offre' %}" class="btn btn-primary-custom px-4 py-2 shadow-sm rounded-pill">
+                    <i class="fas fa-plus-circle me-2"></i> Ajouter une nouvelle offre
+                </a>
+            </div>
+            {% endif %}
+     </div>
 
     {% if messages %}
     <div class="col-12 mb-4">

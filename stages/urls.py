@@ -8,4 +8,5 @@ urlpatterns = [
     path("offres/<int:offre_id>/", views.offre_detail, name="detail_offre"),
     path("offres/<int:offre_id>/postuler/", views.postuler, name="postuler"),
     path("mes-offres/", views.mes_offres, name="mes_offres"),
+    path("mes-offres/ajouter/", views.ajouter_offre, name="ajouter_offre"),
 ]

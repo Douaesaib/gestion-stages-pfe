@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.db.models import Q, Case, When, Value, IntegerField
 from django.contrib.auth.decorators import login_required
 
-from .models import Offre, Candidature
+from .models import Offre, Candidature , Entreprise
 
 
 def offres_list(request):
@@ -175,3 +175,41 @@ def mes_offres(request):
     offres = Offre.objects.filter(entreprise__nom=nom_charika).order_by('-id')
     
     return render(request, "stages/offres_list.html", {"offres": offres})
+
+@login_required
+def ajouter_offre(request):
+    if request.user.role != 'ENTREPRISE':
+        messages.error(request, "Accès refusé.")
+        return redirect('home')
+
+    if request.method == "POST":
+        titre = request.POST.get("titre")
+        description = request.POST.get("description")
+        competences = request.POST.get("competences")
+        formation = request.POST.get("formation")
+        date_debut = request.POST.get("date_debut")
+        date_fin = request.POST.get("date_fin")
+
+        # --- LA CORRECTION EST ICI ---
+        # 1. On prend le nom de la société depuis le profil de l'utilisateur
+        nom_charika = request.user.entreprise.nom_societe
+        
+        # 2. On cherche cette entreprise dans la table des stages (ou on la crée si c'est sa 1ère offre)
+        entreprise_stage, created = Entreprise.objects.get_or_create(nom=nom_charika)
+
+        # 3. On crée l'offre avec la bonne instance "entreprise_stage"
+        Offre.objects.create(
+            entreprise=entreprise_stage,
+            titre=titre,
+            description=description,
+            competences=competences,
+            formation=formation,
+            date_debut=date_debut,
+            date_fin=date_fin
+        )
+        # -------------------------------
+        
+        messages.success(request, "Votre offre de stage a été publiée avec succès ! ✅")
+        return redirect('stages:mes_offres')
+
+    return render(request, "stages/ajouter_offre.html")
