@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.db.models import Q, Case, When, Value, IntegerField
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from .models import Offre, Candidature , Entreprise
 
@@ -213,3 +214,36 @@ def ajouter_offre(request):
         return redirect('stages:mes_offres')
 
     return render(request, "stages/ajouter_offre.html")
+
+@login_required
+def modifier_offre(request, offre_id):
+    if request.user.role != 'ENTREPRISE':
+        messages.error(request, "Accès refusé.")
+        return redirect('home')
+
+    # Kan-jbdou s-smia d charika bash n-t2kdou blli had l'offre dyalha d bsse7 (Sécurité)
+    nom_charika = request.user.entreprise.nom_societe
+    offre = get_object_or_404(Offre, id=offre_id, entreprise__nom=nom_charika)
+
+    if request.method == "POST":
+        offre.titre = request.POST.get("titre")
+        offre.description = request.POST.get("description")
+        offre.competences = request.POST.get("competences")
+        offre.formation = request.POST.get("formation")
+        offre.date_debut = request.POST.get("date_debut")
+        offre.date_fin = request.POST.get("date_fin")
+        
+        offre.save() # Kan-sauvegardiw l'T3dilat
+        
+        messages.success(request, "L'offre a été modifiée avec succès ! ✏️✅")
+        return redirect('stages:mes_offres')
+
+    return render(request, "stages/modifier_offre.html", {"offre": offre})
+
+def offres_list(request):
+    # Ila kan l'utilisateur m-connecté w howa Entreprise, siftou nishan l'Mes Offres
+    if request.user.is_authenticated and request.user.role == 'ENTREPRISE':
+        return redirect('stages:mes_offres')
+        
+    offres = Offre.objects.all().order_by('-id') 
+    return render(request, "stages/offres_list.html", {"offres": offres})

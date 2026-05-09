@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Modifier l'Offre - PFE Manager{% endblock %}
+
+{% block content %}
+<div class="row min-vh-75 py-5">
+    <div class="col-xl-8 col-lg-10 mx-auto animate-fade-in delay-1">
+        
+        <div class="mb-4">
+            <a href="{% url 'stages:mes_offres' %}" class="btn btn-outline-secondary btn-sm shadow-sm rounded-pill px-3">
+                <i class="fas fa-arrow-left me-2"></i> Retour à mes offres
+            </a>
+        </div>
+
+        <div class="card card-premium shadow-lg border-0 overflow-hidden">
+            <div class="card-header bg-white border-bottom p-4">
+                <h3 class="m-0 fw-bold text-dark"><i class="fas fa-edit text-warning me-2"></i> Modifier l'offre</h3>
+                <p class="text-muted small mt-2 mb-0">Mettez à jour les informations de votre offre de stage.</p>
+            </div>
+            
+            <div class="card-body p-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small">Titre de l'offre *</label>
+                        <input type="text" class="form-control p-3 bg-light border-0 shadow-sm" name="titre" value="{{ offre.titre }}" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted small">Description du poste *</label>
+                        <textarea class="form-control p-3 bg-light border-0 shadow-sm" name="description" rows="4" required>{{ offre.description }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-muted small">Compétences techniques</label>
+                            <textarea class="form-control p-3 bg-light border-0 shadow-sm" name="competences" rows="3">{{ offre.competences }}</textarea>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-muted small">Formation requise</label>
+                            <textarea class="form-control p-3 bg-light border-0 shadow-sm" name="formation" rows="3">{{ offre.formation }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-muted small">Date de début *</label>
+                            <input type="date" class="form-control p-3 bg-light border-0 shadow-sm" name="date_debut" value="{{ offre.date_debut|date:'Y-m-d' }}" required>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-muted small">Date de fin *</label>
+                            <input type="date" class="form-control p-3 bg-light border-0 shadow-sm" name="date_fin" value="{{ offre.date_fin|date:'Y-m-d' }}" required>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 border-muted">
+                    
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-warning px-5 py-3 shadow-sm rounded-pill fw-bold text-white">
+                            <i class="fas fa-save me-2"></i> Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

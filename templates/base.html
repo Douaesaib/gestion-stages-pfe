@@ -14,14 +14,16 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-glass mb-4 sticky-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-graduation-cap text-accent me-2"></i>PFE Manager</a>
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Accueil</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'stages:offres_list' %}">Offres</a></li>
                     
+                    {% if user.role != 'ENTREPRISE' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'stages:offres_list' %}">Offres</a></li>
+                    {% endif %}
                     {% if user.is_authenticated %}
                         {% if user.role == 'ADMIN' or user.is_staff %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'analytics:dashboard' %}"><i class="fas fa-chart-pie me-1 text-accent"></i> Dashboard Admin</a></li>

@@ -9,4 +9,5 @@ urlpatterns = [
     path("offres/<int:offre_id>/postuler/", views.postuler, name="postuler"),
     path("mes-offres/", views.mes_offres, name="mes_offres"),
     path("mes-offres/ajouter/", views.ajouter_offre, name="ajouter_offre"),
+    path("mes-offres/modifier/<int:offre_id>/", views.modifier_offre, name="modifier_offre"),
 ]

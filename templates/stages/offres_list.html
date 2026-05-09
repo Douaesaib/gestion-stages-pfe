@@ -95,7 +95,7 @@
                                 Postuler <i class="fas fa-paper-plane ms-2"></i>
                             </a>
                         {% else %}
-                            <a href="#" class="btn btn-outline-secondary w-100 mt-auto py-2">
+                            <a href="{% url 'stages:modifier_offre' offre.id %}" class="btn btn-outline-secondary w-100 mt-auto py-2">
                                 Gérer mon offre <i class="fas fa-cog ms-2"></i>
                             </a>
                         {% endif %}
