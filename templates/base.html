@@ -11,9 +11,33 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-glass mb-4 sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-glass mb-4 sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}"><i class="fas fa-graduation-cap text-accent me-2"></i>PFE Manager</a>
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+                <svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="animation: brand-svg-pulse 4s ease-in-out infinite; flex-shrink:0;">
+                    <defs>
+                        <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#7F00FF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00F0FF;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="navLogoGlow">
+                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <circle cx="19" cy="19" r="16" stroke="url(#navLogoGradient)" stroke-width="2" stroke-dasharray="60 40" stroke-linecap="round" fill="none" filter="url(#navLogoGlow)"/>
+                    <circle cx="19" cy="19" r="5" fill="url(#navLogoGradient)" filter="url(#navLogoGlow)"/>
+                    <line x1="19" y1="3" x2="19" y2="14" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="19" y1="24" x2="19" y2="35" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="3" y1="19" x2="14" y2="19" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="24" y1="19" x2="35" y2="19" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="6.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
+                    <circle cx="31.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
+                    <circle cx="6.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
+                    <circle cx="31.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
+                </svg>
+                <span style="font-family:'Outfit',sans-serif; font-weight:700; font-size:1.2rem; color:#1a0050; letter-spacing:-0.02em;">TalentSync <span style="background:linear-gradient(135deg,#7F00FF,#00c8ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:800;">AI</span></span>
+            </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

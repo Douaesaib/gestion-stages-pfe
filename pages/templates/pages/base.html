@@ -9,7 +9,7 @@
     <meta name="description" content="Gestion des Stages PFE">
     <meta name="author" content="Groupe PFE">
 
-    <title>SB Admin 2 - Gestion Stages</title>
+    <title>TalentSync AI - Plateforme Premium</title>
 
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -24,88 +24,113 @@
 
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+            <a class="sidebar-brand d-flex align-items-center talentsync-brand py-4 my-2" href="/" style="padding-left: 1.25rem;">
+                <svg class="brand-logo-svg flex-shrink-0" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#7F00FF;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#00F0FF;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="logoGlow">
+                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                    </defs>
+                    <circle cx="19" cy="19" r="16" stroke="url(#logoGradient)" stroke-width="2" stroke-dasharray="60 40" stroke-linecap="round" fill="none" filter="url(#logoGlow)"/>
+                    <circle cx="19" cy="19" r="5" fill="url(#logoGradient)" filter="url(#logoGlow)"/>
+                    <line x1="19" y1="3" x2="19" y2="14" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="19" y1="24" x2="19" y2="35" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="3" y1="19" x2="14" y2="19" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="24" y1="19" x2="35" y2="19" stroke="url(#logoGradient)" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="6.5" cy="6.5" r="2" fill="url(#logoGradient)" opacity="0.7"/>
+                    <circle cx="31.5" cy="6.5" r="2" fill="url(#logoGradient)" opacity="0.7"/>
+                    <circle cx="6.5" cy="31.5" r="2" fill="url(#logoGradient)" opacity="0.7"/>
+                    <circle cx="31.5" cy="31.5" r="2" fill="url(#logoGradient)" opacity="0.7"/>
+                </svg>
+                <div class="brand-text-wrap ms-3 d-flex flex-column text-start lh-1 overflow-hidden text-truncate">
+                    <span class="text-white fw-bold tracking-wide mb-1" style="font-size: 1.1rem; letter-spacing: 1px;">TALENTSYNC</span>
+                    <span class="fw-semibold" style="font-size: 0.65rem; letter-spacing: 2px; color: #00F0FF;">AI PLATFORM</span>
                 </div>
-                <div class="sidebar-brand-text mx-3">Stages <sup>PFE</sup></div>
             </a>
-
-            <hr class="sidebar-divider my-0">
+            <hr class="sidebar-divider my-0 border-light border-opacity-10">
 
 {% if user.role == 'ADMIN' or user.is_staff %}
+{% url 'analytics:dashboard' as dashboard_url %}
 <li class="nav-item">
-    <a class="nav-link" href="{% url 'analytics:dashboard' %}"> 
+    <a class="nav-link {% if request.path == dashboard_url %}sidebar-link-active{% endif %}" href="{{ dashboard_url }}"> 
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span>
     </a>
 </li>
 {% endif %}
 
-<hr class="sidebar-divider my-0">
+<hr class="sidebar-divider my-0 border-light border-opacity-10">
 
 {% if user.role == 'ADMIN' or user.is_staff %}
-    <div class="sidebar-heading">Administration</div>
+    <div class="sidebar-heading mt-3 text-white-50">Administration</div>
     <li class="nav-item">
-        <a class="nav-link" href="/admin/">
+        <a class="nav-link {% if '/admin/' in request.path %}sidebar-link-active{% endif %}" href="/admin/">
             <i class="fas fa-fw fa-user-shield"></i>
             <span>Gérer les Utilisateurs</span>
         </a>
     </li>
 
 {% elif user.role|upper == 'ETUDIANT' %}
-    <div class="sidebar-heading">Espace Stagiaire</div>
+    <div class="sidebar-heading mt-3 text-white-50">Espace Stagiaire</div>
+    {% url 'modifier_profile' as profile_url %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'modifier_profile' %}">
+        <a class="nav-link {% if request.path == profile_url %}sidebar-link-active{% endif %}" href="{{ profile_url }}">
             <i class="fas fa-fw fa-user-graduate"></i>
             <span>Mon Profil Académique</span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="/stages/offres/">
+        <a class="nav-link {% if '/stages/offres/' in request.path %}sidebar-link-active{% endif %}" href="/stages/offres/">
             <i class="fas fa-fw fa-briefcase"></i>
             <span>Offres de Stage</span>
         </a>
     </li>
 
 {% elif user.role == 'ENTREPRISE' %}
-    <div class="sidebar-heading">Espace Entreprise</div>
+    <div class="sidebar-heading mt-3 text-white-50">Espace Entreprise</div>
+    {% url 'modifier_entreprise' as entreprise_url %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'modifier_entreprise' %}">
+        <a class="nav-link {% if request.path == entreprise_url %}sidebar-link-active{% endif %}" href="{{ entreprise_url }}">
             <i class="fas fa-fw fa-building"></i>
             <span>Profil Société</span>
         </a>
     </li>
+    {% url 'stages:mes_offres' as mes_offres_url %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'stages:mes_offres' %}">
+        <a class="nav-link {% if request.path == mes_offres_url %}sidebar-link-active{% endif %}" href="{{ mes_offres_url }}">
             <i class="fas fa-fw fa-list"></i>
             <span>Mes Offres</span>
         </a>
     </li>
 {% endif %}
 
-<hr class="sidebar-divider">
+<hr class="sidebar-divider border-light border-opacity-10">
 
 {% if user.role|upper == 'ETUDIANT' %}
 <li class="nav-item">
-    <a class="nav-link" href="/analytics/recommandations/">
-        <i class="fas fa-fw fa-robot"></i>
+    <a class="nav-link {% if '/analytics/recommandations/' in request.path %}sidebar-link-active{% endif %}" href="/analytics/recommandations/">
+        <i class="fas fa-fw fa-robot text-warning"></i>
         <span>Recommandations IA</span>
     </a>
 </li>
 {% endif %}
-<hr class="sidebar-divider">
+<hr class="sidebar-divider border-light border-opacity-10">
 
-<li class="nav-item">
+<li class="nav-item mt-auto mb-3">
     <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
         {% csrf_token %}
     </form>
-    <a class="nav-link " href="#" onclick="document.getElementById('logout-form').submit(); return false;">
+    <a class="nav-link logout-btn text-danger opacity-75" href="#" onclick="document.getElementById('logout-form').submit(); return false;">
         <i class="fas fa-fw fa-sign-out-alt"></i>
-        <span style ="color: white;">Se déconnecter</span>
+        <span>Se déconnecter</span>
     </a>
 </li>
-            <hr class="sidebar-divider d-none d-md-block">
+            <hr class="sidebar-divider d-none d-md-block border-light border-opacity-10">
 
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -116,7 +141,7 @@
 
             <div id="content" style="background-color: var(--bg-color);">
 
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow-sm border-bottom">
+                <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow-sm navbar-glass">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -124,7 +149,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.username }}</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small fw-medium">{{ user.username }}</span>
                                 <img class="img-profile rounded-circle" src="{% static 'img/' %}{% if user.role == 'ENTREPRISE' %}undraw_rocket.svg{% else %}undraw_profile.svg{% endif %}">
                             </a>
                         </li>
@@ -137,10 +162,10 @@
 
                 </div>
                 </div>
-            <footer class="sticky-footer bg-white">
+            <footer class="sticky-footer" style="background: transparent;">
                 <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Gestion Stages 2026</span>
+                    <div class="copyright text-center my-auto small text-muted">
+                        <span>Copyright &copy; TalentSync AI 2026</span>
                     </div>
                 </div>
             </footer>

@@ -81,12 +81,21 @@ h1, h2, h3, h4, h5, h6 {
    Navbar & Glassmorphism
 ========================================= */
 .navbar-glass {
-    background: rgba(255, 255, 255, 0.6) !important;
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 1rem 0;
+    background: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    padding: 0.8rem 1.5rem !important;
     transition: var(--transition);
+    z-index: 10;
+}
+
+@media (min-width: 768px) {
+    .navbar-glass {
+        border-radius: 20px;
+        margin: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    }
 }
 
 /* Base template has navbar-dark by default, let's make it adapted for light premium bg */
@@ -201,58 +210,222 @@ h1, h2, h3, h4, h5, h6 {
 .bg-gradient-green { background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%); }
 .bg-gradient-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
 
-/* Sidebar overrides */
-@keyframes shine {
-    0% { left: -150%; }
-    20% { left: 150%; }
-    100% { left: 150%; }
-}
+/* =========================================
+   SaaS Premium Glassmorphism Sidebar
+========================================= */
 
-.sidebar-dark {
-    position: relative;
-    overflow: hidden;
-}
-
+/* Override default sb-admin-2 background */
 .bg-gradient-primary { 
-    background: linear-gradient(135deg, var(--primary-color) 0%, #8728cc 50%, #3b28cc 100%);
-    background-size: 200% 200%;
-    animation: gradient-shift 8s ease infinite;
-    z-index: 1;
+    background: none !important;
+}
+.bg-gradient-primary::after {
+    display: none;
 }
 
-.bg-gradient-primary::after {
-    content: '';
-    position: absolute;
-    top: 0; left: -150%; width: 50%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transform: skewX(-20deg);
-    animation: shine 6s infinite;
-    z-index: 0;
-    pointer-events: none;
+#accordionSidebar {
+    background: rgba(18, 13, 38, 0.75) !important; /* Deep moody purple/dark */
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    z-index: 100;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+    #accordionSidebar {
+        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.2), inset 1px 1px 0 rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        margin: 20px 0 20px 20px; /* Floating margins */
+        height: calc(100vh - 40px) !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    #accordionSidebar {
+        background: rgba(18, 13, 38, 0.95) !important; /* Solid on mobile for readability */
+        height: 100vh !important;
+        border-radius: 0;
+    }
+}
+
+/* Custom scrollbar for the sidebar */
+#accordionSidebar::-webkit-scrollbar {
+    width: 4px;
+}
+#accordionSidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
 }
 
 .sidebar-dark .nav-item .nav-link { 
     font-family: 'Outfit', sans-serif; 
-    font-size: 1rem; 
-    color: rgba(255,255,255,0.7) !important;
+    font-size: 0.95rem; 
+    color: rgba(255,255,255,0.55) !important;
     position: relative;
     z-index: 2;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    border-radius: 12px;
-    margin: 4px 12px;
-    padding: 12px 15px;
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    border-radius: 16px;
+    margin: 6px 16px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid transparent;
 }
 
-.sidebar-dark .nav-item .nav-link:hover, .sidebar-dark .nav-item.active .nav-link {
-    background: rgba(255,255,255,0.2) !important;
+.sidebar-dark .nav-item .nav-link i {
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    color: rgba(255,255,255,0.45);
+    transition: all 0.35s ease;
+}
+
+.sidebar-dark .nav-item .nav-link span {
+    font-weight: 500;
+}
+
+.sidebar-dark .nav-item .nav-link:hover {
+    background: rgba(255,255,255,0.06) !important;
+    color: rgba(255,255,255,0.9) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-dark .nav-item .nav-link:hover i {
+    color: #fff;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+/* Spectacular Active State */
+.sidebar-dark .nav-item .nav-link.sidebar-link-active {
+    background: linear-gradient(135deg, rgba(59, 40, 204, 0.25) 0%, rgba(0, 240, 255, 0.1) 100%) !important;
     color: #fff !important;
-    transform: translateX(8px);
-    box-shadow: 0 4px 15px rgba(255,255,255,0.1);
-    backdrop-filter: blur(5px);
+    transform: translateX(6px);
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15), inset 0 0 0 1px rgba(0, 240, 255, 0.2);
+    border: none;
+    font-weight: 700;
+}
+
+.sidebar-dark .nav-item .nav-link.sidebar-link-active i {
+    color: var(--accent-color);
+    filter: drop-shadow(0 0 12px var(--accent-color));
+    transform: scale(1.15);
+}
+
+/* Neon Glow Active Indicator */
+.sidebar-dark .nav-item .nav-link.sidebar-link-active::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: var(--accent-color);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px var(--accent-color);
+}
+
+.sidebar-dark .nav-item .nav-link.logout-btn {
+    margin-top: 15px;
+    color: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(220, 53, 69, 0.15) !important;
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.sidebar-dark .nav-item .nav-link.logout-btn:hover {
+    background: rgba(220, 53, 69, 0.3) !important;
+    color: #fff !important;
+    border-color: rgba(220, 53, 69, 0.4);
+    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.2);
 }
 
 .sidebar-dark .sidebar-brand {
     position: relative;
     z-index: 2;
+    padding: 30px 20px;
+    color: #fff;
+    letter-spacing: 1px;
+}
+
+/* =========================================
+   TalentSync AI — Brand Identity
+========================================= */
+
+@keyframes brand-svg-spin {
+    0%   { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes brand-svg-pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.5)); }
+    50%       { filter: drop-shadow(0 0 20px rgba(127, 0, 255, 0.9)); }
+}
+
+.talentsync-brand {
+    text-decoration: none !important;
+    padding: 28px 16px !important;
+    gap: 0;
+}
+
+.brand-logo-svg {
+    flex-shrink: 0;
+    animation: brand-svg-pulse 4s ease-in-out infinite;
+    transition: transform 0.5s ease;
+}
+
+.talentsync-brand:hover .brand-logo-svg {
+    animation: brand-svg-spin 2s linear infinite, brand-svg-pulse 4s ease-in-out infinite;
+}
+
+.brand-text-wrap {
+    gap: 5px;
+}
+
+.brand-name {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.brand-ai-tag {
+    background: linear-gradient(135deg, #7F00FF 0%, #00F0FF 100%);
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 800;
+}
+
+.brand-tagline {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.38);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.sidebar-dark .sidebar-heading {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 0 24px;
+    margin-bottom: 8px;
+    margin-top: 24px;
 }
 
