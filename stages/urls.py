@@ -10,4 +10,6 @@ urlpatterns = [
     path("mes-offres/", views.mes_offres, name="mes_offres"),
     path("mes-offres/ajouter/", views.ajouter_offre, name="ajouter_offre"),
     path("mes-offres/modifier/<int:offre_id>/", views.modifier_offre, name="modifier_offre"),
+    path('mes-candidatures/', views.mes_candidatures, name='mes_candidatures'),
+    path('telecharger-convention/<int:candidature_id>/', views.telecharger_convention, name='telecharger_convention'),
 ]

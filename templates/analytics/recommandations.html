@@ -1,92 +1,116 @@
 {% extends 'pages/base.html' %}
 
-{% block title %}Recommandations IA - PFE Manager{% endblock %}
+{% block title %}Recommandations IA - TalentSync AI{% endblock %}
 
 {% block content %}
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 animate-fade-in">
+    
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800"><i class="fas fa-magic text-warning me-2"></i> Smart Stage IA</h1>
-        <a href="{% url 'analytics:dashboard' %}" class="btn btn-sm btn-outline-secondary shadow-sm">
+        <h1 class="h3 mb-0 text-gray-800 fw-bold">
+            <i class="fas fa-magic text-warning me-2"></i> Smart Stage IA
+        </h1>
+        <a href="{% url 'analytics:dashboard' %}" class="btn btn-sm btn-outline-secondary shadow-sm rounded-pill px-3">
             <i class="fas fa-arrow-left fa-sm me-1"></i> Retour
         </a>
     </div>
         
-        <div class="card card-premium mb-4 border-left-primary">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center">
-                        <i class="fas fa-user-graduate fa-4x text-primary"></i>
-                    </div>
-                    <div class="col-md-10">
-                        <h4 class="card-title">Profil Analysé</h4>
-                        <p class="text-muted mb-1">Basé sur vos compétences actuelles :</p>
-                        <h5>
-                            {% for skill in etudiant.competences.split %}
-                                <span class="badge bg-secondary me-1">{{ skill }}</span>
-                            {% endfor %}
-                        </h5>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <h4 class="mb-4 text-gray-800"><i class="fas fa-fire text-danger me-2"></i> Top Offres Recommandées</h4>
-
-        <div class="row">
-            {% for offre in recommandations %}
-                <div class="col-12 mb-4">
-                    <div class="card card-premium card-offre 
-                        {% if offre.score_calcule >= 60 %} border-success-custom 
-                        {% elif offre.score_calcule >= 30 %} border-warning-custom 
-                        {% else %} border-danger-custom {% endif %}">
-                        
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col-md-8">
-                                    <h5 class="card-title text-primary">
-                                        {{ offre.titre }}
-                                        <small class="text-muted">- {{ offre.entreprise.nom }}</small>
-                                    </h5>
-                                    <p class="card-text text-muted">
-                                        {{ offre.description|truncatewords:30 }}
-                                    </p>
-                                    <p class="mb-0"><small><i class="fas fa-map-marker-alt"></i> {{ offre.entreprise.adresse|default:"Maroc" }}</small></p>
-                                </div>
-
-                                <div class="col-md-4 text-center border-start">
-                                    <p class="mb-1 text-muted">Compatibilité IA</p>
-                                    
-                                    <div class="score-badge mb-2 
-                                        {% if offre.score_calcule >= 60 %} text-success 
-                                        {% elif offre.score_calcule >= 30 %} text-warning 
-                                        {% else %} text-danger {% endif %}">
-                                        {{ offre.score_calcule|floatformat:1 }}%
-                                    </div>
-
-                                    <div class="progress mb-3" style="height: 10px;">
-                                        <div class="progress-bar 
-                                            {% if offre.score_calcule >= 60 %} bg-success 
-                                            {% elif offre.score_calcule >= 30 %} bg-warning 
-                                            {% else %} bg-danger {% endif %}" 
-                                            role="progressbar" 
-                                            style="width: {{ offre.score_calcule }}%">
-                                        </div>
-                                    </div>
-
-                                    <a href="{% url 'stages:detail_offre' offre.id %}" class="btn btn-primary-custom w-100">
-                                         Consulter l'offre <i class="fas fa-arrow-right ms-2"></i>
-                                    </a>
-                                </div>
-                            </div>
+    <div class="card border-0 rounded-4 mb-5 shadow-sm overflow-hidden" style="background: linear-gradient(145deg, #ffffff, #f8f9fc);">
+        <div class="card-body p-4 border-start border-4" style="border-color: #00F0FF !important;">
+            <div class="row align-items-center gy-3">
+                
+                <div class="col-md-5">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="p-3 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="background: rgba(127, 0, 255, 0.1); width: 54px; height: 54px;">
+                            <i class="fas fa-brain fs-4" style="color: #7F00FF;"></i>
+                        </div>
+                        <div>
+                            <h4 class="card-title fw-bold text-dark mb-1 tracking-tight">Profil Analysé</h4>
+                            <p class="text-muted small mb-0">Synergie IA basée sur vos compétences :</p>
                         </div>
                     </div>
                 </div>
-            {% empty %}
-                <div class="alert alert-info text-center">
-                    <i class="fas fa-info-circle"></i> Aucune offre ne correspond parfaitement à votre profil pour le moment.
-                    Essayez d'ajouter plus de compétences !
+
+                <div class="col-md-7 border-start-md">
+                    <div class="d-flex flex-wrap gap-2 justify-content-md-start justify-content-center ps-md-3">
+                        {% for skill in etudiant.competences.split %}
+                            <span class="badge px-3 py-2 rounded-pill fw-medium shadow-sm" style="background: linear-gradient(135deg, #7F00FF, #8E2DE2); color: white; font-size: 0.85rem; letter-spacing: 0.5px;">
+                                {{ skill }}
+                            </span>
+                        {% empty %}
+                            <span class="text-muted small fst-italic">Aucune compétence détectée. Remplissez votre profil.</span>
+                        {% endfor %}
+                    </div>
                 </div>
-            {% endfor %}
+
+            </div>
         </div>
+    </div>
+    <h4 class="mb-4 text-gray-800 fw-bold">
+        <i class="fas fa-fire text-danger me-2"></i> Top Offres Recommandées
+    </h4>
+
+    <div class="row">
+        {% for offre in recommandations %}
+            <div class="col-12 mb-4">
+                <div class="card card-premium card-offre border-0 rounded-4 shadow-sm overflow-hidden
+                    {% if offre.score_calcule >= 60 %} border-left-success 
+                    {% elif offre.score_calcule >= 30 %} border-left-warning 
+                    {% else %} border-left-danger {% endif %}" style="transition: transform 0.2s ease;">
+                    
+                    <div class="card-body p-4">
+                        <div class="row align-items-center gy-3">
+                            
+                            <div class="col-md-8">
+                                <h5 class="card-title fw-bold text-primary mb-2">
+                                    {{ offre.titre }}
+                                    <span class="text-muted fw-normal small ms-1">- {{ offre.entreprise.nom }}</span>
+                                </h5>
+                                <p class="card-text text-muted mb-3" style="font-size: 0.95rem;">
+                                    {{ offre.description|truncatewords:30 }}
+                                </p>
+                                <p class="mb-0 text-gray-600 small">
+                                    <i class="fas fa-map-marker-alt text-danger me-1"></i> {{ offre.entreprise.adresse|default:"Maroc" }}
+                                </p>
+                            </div>
+
+                            <div class="col-md-4 text-center border-start-md ps-md-4">
+                                <p class="mb-1 text-muted small fw-medium">Compatibilité IA</p>
+                                
+                                <div class="fs-3 fw-bold mb-2 
+                                    {% if offre.score_calcule >= 60 %} text-success 
+                                    {% elif offre.score_calcule >= 30 %} text-warning 
+                                    {% else %} text-danger {% endif %}">
+                                    {{ offre.score_calcule|floatformat:1 }}%
+                                </div>
+
+                                <div class="progress mb-3 rounded-pill" style="height: 8px;">
+                                    <div class="progress-bar rounded-pill
+                                        {% if offre.score_calcule >= 60 %} bg-success 
+                                        {% elif offre.score_calcule >= 30 %} bg-warning 
+                                        {% else %} bg-danger {% endif %}" 
+                                        role="progressbar" 
+                                        style="width: {{ offre.score_calcule }}%">
+                                    </div>
+                                </div>
+
+                                <a href="{% url 'stages:detail_offre' offre.id %}" class="btn btn-primary-custom rounded-pill fw-bold w-100 shadow-sm">
+                                     Consulter l'offre <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center p-5 rounded-4 border-0 shadow-sm">
+                    <i class="fas fa-robot fa-3x mb-3 text-info d-block"></i>
+                    <h5 class="fw-bold">Aucune synergie parfaite pour le moment</h5>
+                    <p class="text-muted mb-0">Essayez d'enrichir votre profil académique avec plus de technologies pour aider l'IA.</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

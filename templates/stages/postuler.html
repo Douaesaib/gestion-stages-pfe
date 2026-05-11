@@ -1,440 +1,269 @@
-<!doctype html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Postuler</title>
+{% extends 'base.html' %}
+{% load static %}
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}Postuler — {{ offre.titre }}{% endblock %}
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+{% block content %}
 
-  <style>
-    :root{
-      --bg0:#070A12;
-      --bg1:#0B1220;
-      --card: rgba(17, 25, 40, 0.72);
-      --card2: rgba(17, 25, 40, 0.58);
-      --border: rgba(255,255,255,0.10);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.62);
-      --primary1:#3B82F6;
-      --primary2:#8B5CF6;
+<!-- Ambient background blobs (matches index.html style) -->
+<div class="position-fixed w-100 h-100 top-0 start-0 overflow-hidden" style="z-index: -1; pointer-events:none;">
+    <div style="position:absolute;top:-5%;left:30%;width:50vw;height:50vw;background:linear-gradient(135deg,#00f0ff,#3b28cc);filter:blur(130px);opacity:0.07;border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-10%;right:5%;width:40vw;height:40vw;background:linear-gradient(135deg,#bc00dd,#3b28cc);filter:blur(110px);opacity:0.07;border-radius:50%;"></div>
+</div>
 
-      --datePurple: rgba(167, 139, 250, 0.95);
-      --datePurpleSoft: rgba(167, 139, 250, 0.18);
-    }
+<div class="py-5">
+  <div class="container" style="max-width: 780px;">
 
-    body{
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(1200px 600px at 15% 10%, rgba(59,130,246,0.22), transparent 55%),
-        radial-gradient(900px 500px at 85% 15%, rgba(139,92,246,0.20), transparent 60%),
-        radial-gradient(900px 600px at 30% 90%, rgba(34,197,94,0.12), transparent 60%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
-      background-attachment: fixed;
-      overflow-x: hidden;
-    }
+    <!-- ── Breadcrumb ── -->
+    <nav aria-label="breadcrumb" class="mb-4 animate-fade-in">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none" style="color:var(--primary-color);">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'stages:offres_list' %}" class="text-decoration-none" style="color:var(--primary-color);">Offres</a></li>
+        <li class="breadcrumb-item active text-muted">Postuler</li>
+      </ol>
+    </nav>
 
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .12;
-      mix-blend-mode: overlay;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
-      animation: grain 11s linear infinite;
-    }
-    @keyframes grain{
-      0%{ transform: translate3d(0,0,0); }
-      50%{ transform: translate3d(-2%, 1%, 0); }
-      100%{ transform: translate3d(0,0,0); }
-    }
+    <!-- ── Hero Header ── -->
+    <div class="card card-premium border-0 mb-4 overflow-hidden animate-fade-in" style="padding: 0;">
+      <div class="card-body p-4 p-md-5" style="background: linear-gradient(135deg, rgba(59,40,204,0.06) 0%, rgba(0,240,255,0.04) 100%);">
+        <div class="d-flex align-items-center gap-4">
+          <!-- Icon -->
+          <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+               style="width:64px;height:64px;background:linear-gradient(135deg,#00f0ff,#3b28cc);box-shadow:0 10px 24px rgba(59,40,204,0.25);">
+            <i class="fas fa-paper-plane fa-xl text-white"></i>
+          </div>
+          <!-- Title -->
+          <div>
+            <p class="text-muted small fw-semibold mb-1 text-uppercase" style="letter-spacing:1.2px;">
+              <i class="fas fa-briefcase me-1" style="color:var(--primary-color);"></i>
+              Candidature
+            </p>
+            <h1 class="fw-bold mb-1 text-dark" style="font-size:1.6rem;line-height:1.2;">
+              {{ offre.titre }}
+            </h1>
+            <p class="text-muted mb-0 fw-medium">
+              <i class="far fa-building me-1"></i>
+              {{ offre.entreprise.nom_societe|default:offre.entreprise.nom }}
+            </p>
+          </div>
+        </div>
 
-    .shell{
-      max-width: 760px;
-      margin: 0 auto;
-    }
+        <!-- Badge -->
+        <div class="mt-4">
+          <span class="badge rounded-pill px-3 py-2"
+                style="background:rgba(59,40,204,0.08);color:var(--primary-color);border:1px solid rgba(59,40,204,0.18);font-size:.82rem;font-weight:700;letter-spacing:.5px;">
+            <i class="fas fa-shield-alt me-1"></i> Formulaire de candidature sécurisé
+          </span>
+        </div>
+      </div>
+      <!-- Gradient top accent line -->
+      <div style="height:3px;background:linear-gradient(90deg,var(--primary-color),var(--accent-color),#bc00dd);border-radius:0 0 4px 4px;"></div>
+    </div>
 
-    .hero{
-      border-radius: 22px;
-      background: linear-gradient(135deg, rgba(17,25,40,0.72), rgba(17,25,40,0.52));
-      border: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 18px 55px rgba(0,0,0,.35);
-      position: relative;
-      overflow: hidden;
-      padding: 22px 20px;
-      margin-bottom: 18px;
-    }
-    .hero::after{
-      content:"";
-      position:absolute;
-      inset:-160px -200px auto auto;
-      width: 380px; height: 380px;
-      background: radial-gradient(circle at 30% 30%, rgba(139,92,246,.35), transparent 60%);
-      transform: rotate(10deg);
-      opacity: .95;
-    }
-    .hero h1{
-      margin: 0;
-      font-weight: 900;
-      font-size: 1.55rem;
-      line-height: 1.15;
-      position: relative;
-      z-index: 1;
-    }
-    .hero p{
-      margin: 8px 0 0;
-      color: var(--muted);
-      position: relative;
-      z-index: 1;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      margin-top: 12px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(167, 139, 250, 0.32);
-      background: linear-gradient(180deg, var(--datePurpleSoft), rgba(255,255,255,0.03));
-      color: var(--datePurple);
-      font-weight: 800;
-      font-size: .92rem;
-      position: relative;
-      z-index: 1;
-      width: fit-content;
-    }
+    <!-- ── Form Card ── -->
+    <div class="card card-premium border-0 animate-fade-in delay-1">
+      <div class="card-body p-4 p-md-5">
 
-    .glass-card{
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: linear-gradient(180deg, var(--card), var(--card2));
-      backdrop-filter: blur(10px);
-      box-shadow: 0 14px 38px rgba(0,0,0,0.32);
-      overflow: hidden;
-      position: relative;
-    }
-    .glass-card::before{
-      content:"";
-      position:absolute;
-      top:0; left:0; right:0;
-      height: 3px;
-      background: linear-gradient(90deg,
-        rgba(59,130,246,.0),
-        rgba(59,130,246,.65),
-        rgba(139,92,246,.60),
-        rgba(34,197,94,.45),
-        rgba(59,130,246,.0)
-      );
-      opacity: .95;
-    }
+        <h2 class="h5 fw-bold text-dark mb-4 d-flex align-items-center gap-2">
+          <span class="d-inline-flex align-items-center justify-content-center rounded-circle"
+                style="width:32px;height:32px;background:rgba(59,40,204,0.1);">
+            <i class="fas fa-user-edit" style="color:var(--primary-color);font-size:.85rem;"></i>
+          </span>
+          Vos informations personnelles
+        </h2>
 
-    .form-label{
-      color: rgba(255,255,255,0.82);
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-    .form-control{
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      color: rgba(255,255,255,0.92);
-      border-radius: 14px;
-      padding: .78rem .9rem;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-    }
-    .form-control::placeholder{
-      color: rgba(255,255,255,0.45);
-    }
-    .form-control:focus{
-      background: rgba(255,255,255,0.07);
-      border-color: rgba(167, 139, 250, 0.55);
-      box-shadow: 0 0 0 .22rem rgba(167, 139, 250, 0.14);
-      color: rgba(255,255,255,0.95);
-    }
+        <form method="POST" enctype="multipart/form-data" id="postulForm">
+          {% csrf_token %}
 
-    .btn-primary{
-      border: none;
-      border-radius: 14px;
-      padding: .78rem 1rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--primary1), var(--primary2));
-      box-shadow: 0 12px 26px rgba(59,130,246,0.25);
-      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-    }
-    .btn-primary:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.05);
-      box-shadow: 0 16px 34px rgba(59,130,246,0.34);
-    }
+          <div class="row g-4">
 
-    .btn-soft{
-      border-radius: 14px;
-      padding: .78rem 1rem;
-      font-weight: 900;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.88);
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-    }
-    .btn-soft:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.20);
-      color: rgba(255,255,255,0.92);
-    }
+            <!-- Nom -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark mb-1" for="id_nom">
+                <i class="fas fa-user me-1" style="color:var(--primary-color);"></i>Nom
+              </label>
+              <input type="text" id="id_nom" class="form-control form-control-custom"
+                     name="nom_stagiaire"
+                     placeholder="Ex: El Amrani"
+                     required>
+            </div>
 
-    .hint{
-      color: rgba(255,255,255,0.60);
-      font-size: .92rem;
-      margin-top: 6px;
-    }
+            <!-- Prénom -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark mb-1" for="id_prenom">
+                <i class="fas fa-user me-1" style="color:var(--primary-color);"></i>Prénom
+              </label>
+              <input type="text" id="id_prenom" class="form-control form-control-custom"
+                     name="prenom_stagiaire"
+                     placeholder="Ex: Ahmed"
+                     required>
+            </div>
 
-    .reveal{
-      opacity: 0;
-      transform: translateY(18px) scale(0.985);
-      transition: opacity .7s ease, transform .7s cubic-bezier(.2,.65,.2,1);
-    }
-    .reveal.is-visible{
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+            <!-- Email -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark mb-1" for="id_email">
+                <i class="fas fa-envelope me-1" style="color:var(--primary-color);"></i>Email
+              </label>
+              <input type="email" id="id_email" class="form-control form-control-custom"
+                     name="email"
+                     placeholder="ex: ahmed@email.com"
+                     required>
+            </div>
 
-    
-    .file-input{
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
+            <!-- Téléphone -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark mb-1" for="id_tel">
+                <i class="fas fa-phone me-1" style="color:var(--primary-color);"></i>Téléphone
+              </label>
+              <input type="tel" id="id_tel" class="form-control form-control-custom"
+                     name="telephone"
+                     placeholder="ex: 06xxxxxxxx"
+                     pattern="^(\+212|0)[0-9]{9}$"
+                     required>
+            </div>
 
-    .file-wrap{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-    }
+            <!-- CV Upload -->
+            <div class="col-12">
+              <label class="form-label fw-semibold text-dark mb-2" for="cvInput">
+                <i class="fas fa-file-pdf me-1" style="color:var(--primary-color);"></i>CV (PDF uniquement)
+              </label>
 
-    .file-btn{
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: linear-gradient(135deg, rgba(59,130,246,0.20), rgba(139,92,246,0.18));
-      color: rgba(255,255,255,0.92);
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      user-select: none;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease, filter .18s ease;
-      white-space: nowrap;
-    }
-    .file-btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(167, 139, 250, 0.45);
-      filter: brightness(1.05);
-    }
-    .file-btn:active{
-      transform: translateY(0);
-    }
+              <!-- Hidden real input -->
+              <input id="cvInput" type="file" name="cv" accept=".pdf" required
+                     style="position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;">
 
-    .file-name{
-      color: rgba(255,255,255,0.72);
-      font-weight: 700;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      flex: 1;
-    }
+              <!-- Custom dropzone -->
+              <div id="cvDropzone" onclick="document.getElementById('cvInput').click()"
+                   class="d-flex align-items-center gap-3 p-3 rounded-3 border-2 border-dashed"
+                   style="border:2px dashed rgba(59,40,204,0.2);background:rgba(59,40,204,0.03);cursor:pointer;transition:all 0.3s ease;min-height:68px;">
+                <!-- Upload icon pill -->
+                <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                     style="width:44px;height:44px;background:rgba(59,40,204,0.1);">
+                  <i id="cvIcon" class="fas fa-cloud-upload-alt" style="color:var(--primary-color);font-size:1.2rem;"></i>
+                </div>
+                <div class="flex-grow-1">
+                  <div id="cvNameDisplay" class="fw-semibold text-dark" style="font-size:.9rem;">
+                    Cliquez pour choisir votre CV
+                  </div>
+                  <div class="text-muted small mt-1">Format PDF uniquement · Max 5 MB</div>
+                </div>
+                <span class="badge rounded-pill px-3 py-2 flex-shrink-0"
+                      style="background:rgba(59,40,204,0.08);color:var(--primary-color);border:1px solid rgba(59,40,204,0.15);font-size:.78rem;">
+                  PDF
+                </span>
+              </div>
 
-    .file-meta{
-      display:flex;
-      align-items:center;
-      gap: 8px;
-      color: rgba(255,255,255,0.55);
-      font-size: .90rem;
-      font-weight: 700;
-      white-space: nowrap;
-    }
+              <!-- Error message -->
+              <div id="cvError" class="mt-2 small text-danger fw-medium d-none">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                <span id="cvErrorMsg"></span>
+              </div>
+            </div>
 
-    .file-wrap.is-picked{
-      border-color: rgba(34,197,94,0.35);
-      background: rgba(34,197,94,0.07);
-    }
+          </div><!-- /row -->
 
-    @media (max-width: 576px){
-      .file-wrap{ flex-direction: column; align-items: stretch; }
-      .file-meta{ justify-content: space-between; }
-    }
+          <!-- Action buttons -->
+          <div class="d-flex flex-column flex-sm-row gap-3 mt-5 pt-3 border-top">
+            <button type="submit" class="btn btn-primary-custom flex-fill py-3 rounded-pill shadow-lg">
+              <i class="fas fa-paper-plane me-2"></i> Envoyer ma candidature
+            </button>
+            <a href="{% url 'stages:offres_list' %}"
+               class="btn btn-outline-secondary flex-fill py-3 rounded-pill fw-semibold"
+               style="border-width:2px;">
+              <i class="fas fa-arrow-left me-2"></i> Retour aux offres
+            </a>
+          </div>
 
-    @media (prefers-reduced-motion: reduce){
-      .reveal, body::before{ animation: none !important; transition: none !important; transform: none !important; }
-      .file-btn{ transition: none !important; }
-    }
-  </style>
-</head>
-
-<body>
-
-<div class="container py-5">
-  <div class="shell">
-
-    <div class="hero reveal">
-      <h1>
-        <i class="bi bi-send-fill me-2 text-info"></i>
-        Postuler à : {{ offre.titre }}
-      </h1>
-
-      <p class="mb-0">
-        Entreprise : <strong>{{ offre.entreprise.nom }}</strong>
-      </p>
-
-      <div class="chip">
-        <i class="bi bi-shield-check"></i>
-        Formulaire de candidature
+        </form>
       </div>
     </div>
 
-    <form method="POST" enctype="multipart/form-data" class="glass-card p-4 reveal">
-      {% csrf_token %}
-
-      <div class="row g-3">
-
-        <div class="col-md-6">
-          <label class="form-label">Nom</label>
-          <input type="text" class="form-control"
-                 name="nom_stagiaire"
-                 placeholder="Ex: El..."
-                 required>
+    <!-- ── Info strip ── -->
+    <div class="row g-3 mt-3 animate-fade-in delay-2">
+      <div class="col-sm-4">
+        <div class="card border-0 text-center py-3 px-2" style="background:rgba(59,40,204,0.04);border-radius:14px;">
+          <i class="fas fa-lock text-primary mb-2"></i>
+          <p class="small fw-semibold text-dark mb-0">Données sécurisées</p>
         </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Prénom</label>
-          <input type="text" class="form-control"
-                 name="prenom_stagiaire"
-                 placeholder="Ex: Ahmed..."
-                 required>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-control"
-                 name="email"
-                 placeholder="ex: ahmed@email.com"
-                 required>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label">Téléphone</label>
-          <input type="tel" class="form-control"
-                 name="telephone"
-                 placeholder="ex: 06xxxxxxxx"
-                 pattern="^(\+212|0)[0-9]{9}$"
-                 required>
-        </div>
-
-        <div class="col-12">
-          <label class="form-label">CV (PDF)</label>
-
-          <input id="cvInput" type="file" class="file-input"
-                 name="cv" accept=".pdf" required>
-
-          <div id="cvWrap" class="file-wrap">
-            <label class="file-btn" for="cvInput">
-              <i class="bi bi-cloud-arrow-up"></i>
-              Choisir un fichier
-            </label>
-
-            <div class="file-name" id="cvName">Aucun fichier sélectionné</div>
-
-            <div class="file-meta">
-              <i class="bi bi-filetype-pdf"></i>
-              PDF uniquement
-            </div>
-          </div>
-
-          <div class="hint">
-            Veuillez télécharger votre CV exclusivement au format PDF
-          </div>
-        </div>
-
       </div>
-
-      <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
-        <button class="btn btn-primary flex-fill" type="submit">
-          🚀 Envoyer
-        </button>
-
-        <a class="btn btn-soft flex-fill" href="{% url 'stages:offres_list' %}">
-          <i class="bi bi-arrow-left me-1"></i>Retour
-        </a>
+      <div class="col-sm-4">
+        <div class="card border-0 text-center py-3 px-2" style="background:rgba(0,240,255,0.05);border-radius:14px;">
+          <i class="fas fa-bolt mb-2" style="color:var(--accent-color);"></i>
+          <p class="small fw-semibold text-dark mb-0">Réponse rapide</p>
+        </div>
       </div>
-    </form>
+      <div class="col-sm-4">
+        <div class="card border-0 text-center py-3 px-2" style="background:rgba(188,0,221,0.04);border-radius:14px;">
+          <i class="fas fa-robot mb-2" style="color:#bc00dd;"></i>
+          <p class="small fw-semibold text-dark mb-0">Matching IA</p>
+        </div>
+      </div>
+    </div>
 
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
 
+{% block extra_js %}
 <script>
-  (function () {
-    const els = document.querySelectorAll(".reveal");
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("is-visible");
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+(function () {
+  const input   = document.getElementById("cvInput");
+  const nameDiv = document.getElementById("cvNameDisplay");
+  const icon    = document.getElementById("cvIcon");
+  const zone    = document.getElementById("cvDropzone");
+  const errBox  = document.getElementById("cvError");
+  const errMsg  = document.getElementById("cvErrorMsg");
 
-    els.forEach((el, i) => {
-      el.style.transitionDelay = (i * 90) + "ms";
-      obs.observe(el);
-    });
-  })();
+  function showError(msg) {
+    errMsg.textContent = msg;
+    errBox.classList.remove("d-none");
+    zone.style.borderColor = "#dc3545";
+    zone.style.background  = "rgba(220,53,69,0.04)";
+  }
+  function clearError() {
+    errBox.classList.add("d-none");
+    zone.style.borderColor = "";
+    zone.style.background  = "";
+  }
 
-  (function () {
-    const input = document.getElementById("cvInput");
-    const nameEl = document.getElementById("cvName");
-    const wrap = document.getElementById("cvWrap");
+  input.addEventListener("change", function () {
+    const file = input.files && input.files[0];
+    if (!file) {
+      nameDiv.textContent = "Cliquez pour choisir votre CV";
+      icon.className = "fas fa-cloud-upload-alt";
+      icon.style.color = "var(--primary-color)";
+      clearError();
+      return;
+    }
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      showError("Format invalide — seuls les fichiers PDF sont acceptés.");
+      input.value = "";
+      nameDiv.textContent = "Cliquez pour choisir votre CV";
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      showError("Fichier trop lourd — maximum 5 MB.");
+      input.value = "";
+      nameDiv.textContent = "Cliquez pour choisir votre CV";
+      return;
+    }
+    clearError();
+    nameDiv.textContent = file.name;
+    icon.className = "fas fa-check-circle";
+    icon.style.color = "#198754";
+    zone.style.borderColor = "rgba(25,135,84,0.45)";
+    zone.style.background  = "rgba(25,135,84,0.05)";
+  });
 
-    if (!input) return;
-
-    input.addEventListener("change", () => {
-      const file = input.files && input.files[0];
-      if (!file) {
-        nameEl.textContent = "Aucun fichier sélectionné";
-        wrap.classList.remove("is-picked");
-        return;
-      }
-
-      const isPdf = file.name.toLowerCase().endsWith(".pdf");
-      if (!isPdf) {
-        nameEl.textContent = "⚠️ Format invalide (PDF فقط)";
-        wrap.classList.remove("is-picked");
-        input.value = "";
-        return;
-      }
-
-      nameEl.textContent = file.name;
-      wrap.classList.add("is-picked");
-    });
-  })();
+  /* Drag-and-drop support */
+  zone.addEventListener("dragover",  function(e){ e.preventDefault(); zone.style.borderColor="var(--primary-color)"; });
+  zone.addEventListener("dragleave", function()  { clearError(); });
+  zone.addEventListener("drop", function(e){
+    e.preventDefault();
+    const files = e.dataTransfer.files;
+    if (files.length) { input.files = files; input.dispatchEvent(new Event("change")); }
+  });
+})();
 </script>
-
-</body>
-</html>
+{% endblock %}

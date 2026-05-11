@@ -42,6 +42,23 @@ class Candidature(models.Model):
     offre = models.ForeignKey(Offre, on_delete=models.CASCADE)
     date_candidature = models.DateTimeField(auto_now_add=True)
 
+    # ==========================================================
+    # 🌟 HNA ZEDNA SCORE IA W STATUT (BACHI L'CONVENTION T-KHDEM)
+    # ==========================================================
+    score_ia = models.FloatField(null=True, blank=True)
+
+    STATUT_CHOICES = [
+        ('EN_ATTENTE', 'En attente'),
+        ('ACCEPTEE', 'Acceptée'),
+        ('REFUSEE', 'Refusée'),
+    ]
+    statut = models.CharField(
+        max_length=20, 
+        choices=STATUT_CHOICES, 
+        default='EN_ATTENTE'
+    )
+    # ==========================================================
+
     class Meta:
         constraints = [
             models.UniqueConstraint(

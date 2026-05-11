@@ -90,6 +90,13 @@
             <span>Offres de Stage</span>
         </a>
     </li>
+    
+    <li class="nav-item">
+        <a class="nav-link {% if '/stages/mes-candidatures/' in request.path %}sidebar-link-active{% endif %}" href="{% url 'stages:mes_candidatures' %}">
+            <i class="fas fa-fw fa-file-contract text-info"></i>
+            <span>Mes Candidatures</span>
+        </a>
+    </li>
 
 {% elif user.role == 'ENTREPRISE' %}
     <div class="sidebar-heading mt-3 text-white-50">Espace Entreprise</div>
@@ -107,7 +114,14 @@
             <span>Mes Offres</span>
         </a>
     </li>
-{% endif %}
+    
+    <li class="nav-item">
+        <a class="nav-link {% if '/candidatures-recues/' in request.path %}sidebar-link-active{% endif %}" href="{% url 'candidatures_recues' %}">
+            <i class="fas fa-fw fa-users text-info"></i>
+            <span>Candidatures Reçues</span>
+        </a>
+    </li>
+    {% endif %}
 
 <hr class="sidebar-divider border-light border-opacity-10">
 

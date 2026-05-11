@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes Candidatures — TalentSync AI{% endblock %}
+
+{% block content %}
+
+<!-- Ambient blobs -->
+<div class="position-fixed w-100 h-100 top-0 start-0 overflow-hidden" style="z-index:-1;pointer-events:none;">
+    <div style="position:absolute;top:-5%;left:30%;width:50vw;height:50vw;background:linear-gradient(135deg,#00f0ff,#3b28cc);filter:blur(130px);opacity:0.06;border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-10%;right:5%;width:40vw;height:40vw;background:linear-gradient(135deg,#bc00dd,#3b28cc);filter:blur(110px);opacity:0.06;border-radius:50%;"></div>
+</div>
+
+<div class="py-5">
+<div class="container" style="max-width:1000px;">
+
+    <!-- ── Page Header ── -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5 animate-fade-in">
+        <div>
+            <p class="text-muted small fw-semibold mb-1 text-uppercase" style="letter-spacing:1.2px;">
+                <i class="fas fa-user-graduate me-1" style="color:var(--primary-color);"></i>
+                Espace Stagiaire
+            </p>
+            <h1 class="fw-bold text-dark mb-1" style="font-size:1.9rem;">
+                Mes <span class="text-gradient">Candidatures</span>
+            </h1>
+            <p class="text-muted mb-0">Suivez l'état de vos postulations en temps réel.</p>
+        </div>
+        <a href="{% url 'stages:offres_list' %}"
+           class="btn btn-primary-custom px-4 py-2 rounded-pill shadow-sm align-self-start align-self-md-center">
+            <i class="fas fa-search me-2"></i>Voir les offres
+        </a>
+    </div>
+
+    <!-- ── Stats Strip ── -->
+    <div class="row g-3 mb-5 animate-fade-in delay-1">
+        <div class="col-sm-4">
+            <div class="card border-0 text-center py-4"
+                 style="border-radius:16px;background:rgba(59,40,204,0.05);border:1px solid rgba(59,40,204,0.1)!important;">
+                <div class="fw-black" style="font-size:2rem;color:var(--primary-color);font-family:'Outfit',sans-serif;">
+                    {{ total }}
+                </div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">Total envoyées</p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card border-0 text-center py-4"
+                 style="border-radius:16px;background:rgba(28,200,138,0.05);border:1px solid rgba(28,200,138,0.15)!important;">
+                <div class="fw-black" style="font-size:2rem;color:#1cc88a;font-family:'Outfit',sans-serif;">
+                    {{ nb_acceptees }}
+                </div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">Acceptées</p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card border-0 text-center py-4"
+                 style="border-radius:16px;background:rgba(246,194,62,0.06);border:1px solid rgba(246,194,62,0.2)!important;">
+                <div class="fw-black" style="font-size:2rem;color:#e0a800;font-family:'Outfit',sans-serif;">
+                    {{ nb_en_attente }}
+                </div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">En attente</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Messages ── -->
+    {% if messages %}
+    <div class="mb-4 animate-fade-in">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 border-0 shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ── Main Card ── -->
+    <div class="card card-premium border-0 animate-fade-in delay-2">
+        <!-- Gradient top bar -->
+        <div style="height:3px;background:linear-gradient(90deg,var(--primary-color),var(--accent-color),#bc00dd);border-radius:20px 20px 0 0;"></div>
+
+        <div class="card-header border-0 d-flex align-items-center gap-2 px-4 pt-4 pb-3"
+             style="background:transparent;">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-3"
+                  style="width:36px;height:36px;background:rgba(59,40,204,0.08);">
+                <i class="fas fa-file-contract" style="color:var(--primary-color);font-size:.9rem;"></i>
+            </span>
+            <h6 class="mb-0 fw-bold text-dark">Historique des postulations &amp; conventions PFE</h6>
+        </div>
+
+        <div class="card-body p-0">
+            {% if candidatures %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" style="border-collapse:separate;border-spacing:0;">
+                    <thead style="font-size:0.75rem;">
+                        <tr style="background:rgba(244,245,249,0.8);">
+                            <th class="py-3 px-4 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Offre de Stage</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Entreprise</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Statut</th>
+                            <th class="py-3 px-4 text-end text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Convention PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in candidatures %}
+                        <tr style="transition:background .2s;">
+                            <!-- Offre -->
+                            <td class="py-4 px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center justify-content-center rounded-3 flex-shrink-0"
+                                         style="width:42px;height:42px;background:linear-gradient(135deg,rgba(0,240,255,0.15),rgba(59,40,204,0.15));">
+                                        <i class="fas fa-briefcase" style="color:var(--primary-color);font-size:.9rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-dark" style="font-size:.95rem;">{{ c.offre.titre }}</div>
+                                        <div class="text-muted small">
+                                            <i class="far fa-calendar-alt me-1"></i>
+                                            {{ c.offre.date_debut }} → {{ c.offre.date_fin }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Entreprise -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0"
+                                         style="width:32px;height:32px;background:rgba(59,40,204,0.08);">
+                                        <i class="far fa-building" style="color:var(--primary-color);font-size:.8rem;"></i>
+                                    </div>
+                                    <span class="fw-medium text-dark" style="font-size:.9rem;">{{ c.offre.entreprise.nom }}</span>
+                                </div>
+                            </td>
+
+                            <!-- Statut -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                {% if c.statut == 'ACCEPTEE' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-semibold"
+                                          style="background:rgba(28,200,138,0.12);color:#0d9e6e;border:1px solid rgba(28,200,138,0.25);font-size:.8rem;">
+                                        <i class="fas fa-check-circle me-1"></i>Acceptée
+                                    </span>
+                                {% elif c.statut == 'REFUSEE' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-semibold"
+                                          style="background:rgba(231,74,59,0.10);color:#c0392b;border:1px solid rgba(231,74,59,0.2);font-size:.8rem;">
+                                        <i class="fas fa-times-circle me-1"></i>Refusée
+                                    </span>
+                                {% else %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-semibold"
+                                          style="background:rgba(246,194,62,0.12);color:#b8860b;border:1px solid rgba(246,194,62,0.3);font-size:.8rem;">
+                                        <i class="fas fa-clock me-1"></i>En attente
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Convention -->
+                            <td class="text-end px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                {% if c.statut == 'ACCEPTEE' %}
+                                    <a href="{% url 'stages:telecharger_convention' c.id %}"
+                                       class="btn btn-sm rounded-pill px-3 py-2 fw-semibold"
+                                       style="background:linear-gradient(135deg,var(--primary-color),var(--accent-color));color:#fff;font-size:.8rem;box-shadow:0 4px 12px rgba(59,40,204,0.25);border:none;">
+                                        <i class="fas fa-download me-1"></i>Télécharger
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small fst-italic">En cours de traitement</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% else %}
+            <!-- Empty state -->
+            <div class="text-center py-5 px-4">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
+                     style="width:80px;height:80px;background:rgba(59,40,204,0.07);">
+                    <i class="fas fa-folder-open fa-2x" style="color:var(--primary-color);opacity:.5;"></i>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">Aucune candidature pour le moment</h5>
+                <p class="text-muted mb-4">Parcourez les offres disponibles et postulez dès maintenant !</p>
+                <a href="{% url 'stages:offres_list' %}" class="btn btn-primary-custom px-5 py-2 rounded-pill shadow-sm">
+                    <i class="fas fa-search me-2"></i>Explorer les offres
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+</div>
+{% endblock %}

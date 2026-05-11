@@ -1,8 +1,11 @@
-from django.shortcuts import render, redirect
+# 🌟 ZEDNA get_object_or_404 HNA
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import EtudiantProfileForm , EntrepriseProfileForm, SignUpForm
-from .models import Etudiant,Entreprise
+from .forms import EtudiantProfileForm, EntrepriseProfileForm, SignUpForm
+from .models import Etudiant, Entreprise
+from django.contrib import messages
+from stages.models import Candidature, Offre
 
 
 def home(request):
@@ -43,7 +46,6 @@ def modifier_profile(request):
 
 @login_required
 def modifier_entreprise(request):
-  
     if request.user.role != 'ENTREPRISE':
         return redirect('home')
 
@@ -76,8 +78,39 @@ def remplir_cv(request):
             raw_skills = form.cleaned_data['competences']
             skills_list = [s.strip().lower() for s in raw_skills.split(',')]
             
-            return redirect('success_url')
+            return redirect('home') # 🌟 Bddlna success_url li kant khawya
     else:
         form = EtudiantProfileForm(instance=etudiant)
         
     return render(request, 'cv.html', {'form': form})
+
+# ====================================================================
+# 🌟 FONCTIONS GESTION DES CANDIDATURES (CORRIGÉES & PROPRES)
+# ====================================================================
+@login_required
+def candidatures_recues(request):
+    if request.user.role != 'ENTREPRISE':
+        return redirect('home')
+
+    # Bima anna request.user.entreprise fiha smit sh-charika ("NTT DATA")
+    nom_societe = request.user.entreprise 
+    
+    # 🌟 KAN-ZIDOU __nom HNA BASH DJANGO Y-QRAH STR NISHAN
+    candidatures = Candidature.objects.filter(offre__entreprise__nom=nom_societe).order_by('-id')
+        
+    return render(request, 'stages/candidatures_recues.html', {'candidatures': candidatures})
+
+@login_required
+def changer_statut_candidature(request, candidature_id, nouveau_statut):
+    # 1. Jbdi l'candidature nishan
+    candidature = get_object_or_404(Candidature, id=candidature_id)
+    
+    # 2. Validation basique dyal l'statut
+    if nouveau_statut in ['ACCEPTEE', 'REFUSEE']:
+        candidature.statut = nouveau_statut
+        candidature.save() # 🌟 L'enregistrement darouri f MySQL
+        
+        # 3. Zidi message bach t-t2kdi blli ra daret l'action
+        messages.success(request, f"Le statut a été mis à jour : {nouveau_statut}")
+    
+    return redirect('candidatures_recues')

@@ -301,13 +301,17 @@ h1, h2, h3, h4, h5, h6 {
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
-/* Spectacular Active State */
+/* Spectacular Active State (Clean & Sans Underline) */
 .sidebar-dark .nav-item .nav-link.sidebar-link-active {
     background: linear-gradient(135deg, rgba(59, 40, 204, 0.25) 0%, rgba(0, 240, 255, 0.1) 100%) !important;
     color: #fff !important;
     transform: translateX(6px);
-    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15), inset 0 0 0 1px rgba(0, 240, 255, 0.2);
-    border: none;
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15), inset 0 0 0 1px rgba(0, 240, 255, 0.2) !important;
+    
+    /* 🌟 KAN-TIYYROU GA3 S-STOURA L'MKHERBQIN */
+    border: none !important; 
+    border-bottom: none !important;
+    text-decoration: none !important;
     font-weight: 700;
 }
 
@@ -317,7 +321,7 @@ h1, h2, h3, h4, h5, h6 {
     transform: scale(1.15);
 }
 
-/* Neon Glow Active Indicator */
+/* Neon Glow Active Indicator (L'Khet d l'issr) */
 .sidebar-dark .nav-item .nav-link.sidebar-link-active::before {
     content: '';
     position: absolute;
@@ -331,26 +335,13 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 0 15px var(--accent-color);
 }
 
-.sidebar-dark .nav-item .nav-link.logout-btn {
-    margin-top: 15px;
-    color: rgba(255, 255, 255, 0.85) !important;
-    background: rgba(220, 53, 69, 0.15) !important;
-    border: 1px solid rgba(220, 53, 69, 0.2);
-}
-
-.sidebar-dark .nav-item .nav-link.logout-btn:hover {
-    background: rgba(220, 53, 69, 0.3) !important;
-    color: #fff !important;
-    border-color: rgba(220, 53, 69, 0.4);
-    box-shadow: 0 8px 24px rgba(220, 53, 69, 0.2);
-}
-
-.sidebar-dark .sidebar-brand {
-    position: relative;
-    z-index: 2;
-    padding: 30px 20px;
-    color: #fff;
-    letter-spacing: 1px;
+/* 🌟 T2KID DÉFINITIF 3LA LES LIENS L'3ADIYIN BASH MA Y-KOUNSH FIHUM UNDERLINE */
+.sidebar-dark .nav-item .nav-link,
+.sidebar-dark .nav-item .nav-link:hover,
+.sidebar-dark .nav-item .nav-link:focus {
+    text-decoration: none !important;
+    border-bottom: none !important;
+    outline: none !important;
 }
 
 /* =========================================
