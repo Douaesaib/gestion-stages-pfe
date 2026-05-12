@@ -233,10 +233,10 @@ h1, h2, h3, h4, h5, h6 {
 
 @media (min-width: 768px) {
     #accordionSidebar {
-        box-shadow: 8px 0 32px rgba(0, 0, 0, 0.2), inset 1px 1px 0 rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        margin: 20px 0 20px 20px; /* Floating margins */
-        height: calc(100vh - 40px) !important;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+        border-radius: 0;
+        margin: 0; 
+        min-height: 100vh !important;
     }
 }
 
@@ -264,12 +264,14 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
     z-index: 2;
     transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    border-radius: 16px;
-    margin: 6px 16px;
-    padding: 12px 18px;
+    border-radius: 12px;
+    margin: 4px 10px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    justify-content: flex-start;
+    text-align: left;
+    gap: 12px;
     border: 1px solid transparent;
 }
 
@@ -325,7 +327,7 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar-dark .nav-item .nav-link.sidebar-link-active::before {
     content: '';
     position: absolute;
-    left: -16px;
+    left: -10px;
     top: 50%;
     transform: translateY(-50%);
     width: 4px;

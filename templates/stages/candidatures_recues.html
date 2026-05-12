@@ -18,8 +18,22 @@
 <div class="row animate-fade-in">
     <div class="col-12">
         <div class="card shadow mb-4 border-0 rounded-lg">
-            <div class="card-header py-3 bg-white">
-                <h6 class="m-0 fw-bold text-primary">Étudiants ayant postulé à vos offres</h6>
+            <div class="card-header py-3 bg-white d-flex flex-column flex-md-row align-items-center justify-content-between border-bottom-0">
+                <h6 class="m-0 fw-bold text-primary mb-3 mb-md-0">Candidatures des étudiants</h6>
+                <ul class="nav nav-pills bg-light p-1 rounded-pill" id="candidatureTabs" role="tablist" style="font-size: 0.85rem;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill text-dark fw-bold px-3 py-1" data-bs-toggle="pill" data-filter="all">Toutes</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill text-warning fw-bold px-3 py-1" data-bs-toggle="pill" data-filter="EN_ATTENTE">En attente</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill text-success fw-bold px-3 py-1" data-bs-toggle="pill" data-filter="ACCEPTEE">Acceptées</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill text-danger fw-bold px-3 py-1" data-bs-toggle="pill" data-filter="REFUSEE">Refusées</button>
+                    </li>
+                </ul>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -36,7 +50,7 @@
                         </thead>
                         <tbody>
                             {% for c in candidatures %}
-                            <tr>
+                            <tr class="candidature-row" data-status="{{ c.statut }}">
                                 <td class="py-3 px-4 fw-bold text-dark">
                                     {{ c.nom_stagiaire }} {{ c.prenom_stagiaire|default:"" }}
                                 </td>
@@ -95,4 +109,36 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const filterButtons = document.querySelectorAll('#candidatureTabs button');
+    const rows = document.querySelectorAll('.candidature-row');
+
+    // Mettre le style actif sur le bouton "Toutes" par défaut
+    document.querySelector('[data-filter="all"]').classList.add('bg-white', 'shadow-sm');
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Retirer le style des autres boutons
+            filterButtons.forEach(b => { 
+                b.classList.remove('active', 'bg-white', 'shadow-sm'); 
+            });
+            // Ajouter le style au bouton cliqué
+            this.classList.add('active', 'bg-white', 'shadow-sm');
+
+            const filter = this.getAttribute('data-filter');
+
+            // Filtrer les lignes
+            rows.forEach(row => {
+                if (filter === 'all' || row.getAttribute('data-status') === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 {% endblock %}
