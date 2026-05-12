@@ -73,29 +73,36 @@
                                 </p>
                             </div>
 
-                            <div class="col-md-4 text-center border-start-md ps-md-4">
-                                <p class="mb-1 text-muted small fw-medium">Compatibilité IA</p>
-                                
-                                <div class="fs-3 fw-bold mb-2 
-                                    {% if offre.score_calcule >= 60 %} text-success 
-                                    {% elif offre.score_calcule >= 30 %} text-warning 
-                                    {% else %} text-danger {% endif %}">
-                                    {{ offre.score_calcule|floatformat:1 }}%
-                                </div>
-
-                                <div class="progress mb-3 rounded-pill" style="height: 8px;">
-                                    <div class="progress-bar rounded-pill
-                                        {% if offre.score_calcule >= 60 %} bg-success 
-                                        {% elif offre.score_calcule >= 30 %} bg-warning 
-                                        {% else %} bg-danger {% endif %}" 
-                                        role="progressbar" 
-                                        style="width: {{ offre.score_calcule }}%">
+                            <div class="col-md-4 border-start-md ps-md-4 d-flex flex-column justify-content-center">
+                                {% with score_int=offre.score_calcule|floatformat:0|add:"0" %}
+                                <div class="mb-4 w-100 px-2">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-muted small fw-bold text-uppercase tracking-wider" style="letter-spacing: 1px; font-size: 0.7rem;">
+                                            <i class="fas fa-brain me-1" style="color: #7F00FF;"></i> Synergie IA
+                                        </span>
+                                        <span class="fw-black" style="font-size: 1.2rem; color: #1a1a2e; font-family: 'Outfit', sans-serif;">
+                                            {{ score_int }}%
+                                        </span>
+                                    </div>
+                                    <div class="progress rounded-pill shadow-sm" style="height: 6px; background-color: #f1f3f9;">
+                                        <div class="progress-bar rounded-pill" role="progressbar" 
+                                             style="width: {{ score_int }}%; background: linear-gradient(90deg, #7F00FF, #00F0FF); transition: width 1.5s ease-in-out;" 
+                                             aria-valuenow="{{ score_int }}" aria-valuemin="0" aria-valuemax="100">
+                                        </div>
+                                    </div>
+                                    <div class="text-end mt-1">
+                                        <span class="small fw-medium" style="font-size: 0.7rem; color: {% if score_int >= 60 %}#1cc88a{% elif score_int >= 30 %}#f6c23e{% else %}#858796{% endif %};">
+                                            {% if score_int >= 60 %}Excellent match{% elif score_int >= 30 %}Match potentiel{% else %}Compétences éloignées{% endif %}
+                                        </span>
                                     </div>
                                 </div>
 
-                                <a href="{% url 'stages:detail_offre' offre.id %}" class="btn btn-primary-custom rounded-pill fw-bold w-100 shadow-sm">
-                                     Consulter l'offre <i class="fas fa-arrow-right ms-2"></i>
-                                </a>
+                                <div class="px-2">
+                                    <a href="{% url 'stages:detail_offre' offre.id %}" class="btn btn-outline-primary rounded-pill fw-bold w-100" style="padding: 0.5rem 1.5rem; font-size: 0.85rem; border-width: 2px;">
+                                         Voir l'offre <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                                {% endwith %}
                             </div>
 
                         </div>

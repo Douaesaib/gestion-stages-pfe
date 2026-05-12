@@ -7,7 +7,14 @@ from reportlab.lib.units import cm
 from django.conf import settings
 import os
 
-def generer_pdf_convention(stagiaire_nom="ETUDIANT INCONNU", entreprise_nom="ENTREPRISE NON SPECIFIEE"):
+def generer_pdf_convention(
+    stagiaire_nom="ETUDIANT INCONNU", 
+    entreprise_nom="ENTREPRISE NON SPECIFIEE",
+    entreprise_adresse="(Adresse non spécifiée)",
+    entreprise_responsable="(Le Responsable)",
+    stagiaire_filiere="Génie Informatique",
+    annee_universitaire="2025/2026"
+):
     buffer = BytesIO()
     p = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
@@ -60,8 +67,8 @@ def generer_pdf_convention(stagiaire_nom="ETUDIANT INCONNU", entreprise_nom="ENT
     p.drawString(3 * cm, y_position, f"2. L'Entreprise d'Accueil : {entreprise_nom}")
     p.setFillColor(black)
     p.setFont("Helvetica", 11)
-    p.drawString(3.5 * cm, y_position - 0.7 * cm, "Adresse : (Adresse de l'entreprise ici...)")
-    p.drawString(3.5 * cm, y_position - 1.4 * cm, "Représentée par : (Nom du Responsable)")
+    p.drawString(3.5 * cm, y_position - 0.7 * cm, f"Adresse : {entreprise_adresse}")
+    p.drawString(3.5 * cm, y_position - 1.4 * cm, f"Représentée par : {entreprise_responsable}")
     y_position -= 3.5 * cm
 
     # PARTIE 3 : LE STAGIAIRE (Dynamique)
@@ -70,8 +77,8 @@ def generer_pdf_convention(stagiaire_nom="ETUDIANT INCONNU", entreprise_nom="ENT
     p.drawString(3 * cm, y_position, f"3. Le Stagiaire : {stagiaire_nom}")
     p.setFillColor(black)
     p.setFont("Helvetica", 11)
-    p.drawString(3.5 * cm, y_position - 0.7 * cm, "Filière : Génie Informatique (Exemple)")
-    p.drawString(3.5 * cm, y_position - 1.4 * cm, "Année Universitaire : 2025/2026")
+    p.drawString(3.5 * cm, y_position - 0.7 * cm, f"Filière : {stagiaire_filiere}")
+    p.drawString(3.5 * cm, y_position - 1.4 * cm, f"Année Universitaire : {annee_universitaire}")
     y_position -= 3 * cm
 
     # --- 4. SIGNATURES ---
