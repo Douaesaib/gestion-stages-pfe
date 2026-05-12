@@ -15,7 +15,7 @@ def dashboard_view(request):
         'nb_etudiants': Etudiant.objects.count(),
         'nb_entreprises': Entreprise.objects.count(),
         'nb_offres': Offre.objects.count(),
-        'nb_convention': Candidature.objects.count(),
+        'nb_convention': Candidature.objects.filter(statut='ACCEPTEE').count(),
     }
     return render(request, 'analytics/dashboard.html', context)
 
