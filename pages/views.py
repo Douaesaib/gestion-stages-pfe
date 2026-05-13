@@ -2,8 +2,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login as auth_login, authenticate
 from django.contrib.auth.decorators import login_required
-from .forms import EtudiantProfileForm, EntrepriseProfileForm, SignUpForm
-from .models import Etudiant, Entreprise
+from .forms import EtudiantProfileForm, EntrepriseProfileForm, SignUpForm, EncadrantProfileForm
+from .models import Etudiant, Entreprise, Encadrant
 from django.contrib import messages
 from stages.models import Candidature, Offre
 
@@ -21,6 +21,8 @@ def signup(request):
                 return redirect('modifier_profile')
             elif user.role == 'ENTREPRISE':
                 return redirect('modifier_entreprise')
+            elif user.role == 'ENCADRANT':
+                return redirect('modifier_encadrant')
             else:
                 return redirect('home')
     else:
@@ -60,6 +62,23 @@ def modifier_entreprise(request):
         form = EntrepriseProfileForm(instance=entreprise)
         
     return render(request, 'pages/modifier_entreprise.html', {'form': form})
+
+@login_required
+def modifier_encadrant(request):
+    if request.user.role != 'ENCADRANT':
+        return redirect('home')
+
+    encadrant, created = Encadrant.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = EncadrantProfileForm(request.POST, request.FILES, instance=encadrant)
+        if form.is_valid():
+            form.save()
+            return redirect('stages:dashboard_encadrant')
+    else:
+        form = EncadrantProfileForm(instance=encadrant)
+        
+    return render(request, 'pages/modifier_encadrant.html', {'form': form})
 
 @login_required
 def remplir_cv(request):
@@ -102,15 +121,39 @@ def candidatures_recues(request):
 
 @login_required
 def changer_statut_candidature(request, candidature_id, nouveau_statut):
-    # 1. Jbdi l'candidature nishan
     candidature = get_object_or_404(Candidature, id=candidature_id)
     
-    # 2. Validation basique dyal l'statut
     if nouveau_statut in ['ACCEPTEE', 'REFUSEE']:
         candidature.statut = nouveau_statut
-        candidature.save() # 🌟 L'enregistrement darouri f MySQL
+        candidature.save()
         
-        # 3. Zidi message bach t-t2kdi blli ra daret l'action
-        messages.success(request, f"Le statut a été mis à jour : {nouveau_statut}")
+        if nouveau_statut == 'ACCEPTEE':
+            # Récupérer les infos du tuteur depuis le POST (si présentes)
+            tuteur_nom = request.POST.get('tuteur_nom')
+            tuteur_email = request.POST.get('tuteur_email')
+            tuteur_poste = request.POST.get('tuteur_poste')
+            
+            from stages.views import auto_creer_stage_actif
+            auto_creer_stage_actif(candidature, tuteur_nom, tuteur_email, tuteur_poste)
+            messages.success(request, f"Félicitations ! Candidature acceptée et tuteur affecté ✅")
+        else:
+            messages.success(request, f"Le statut a été mis à jour : {nouveau_statut}")
     
+    return redirect('candidatures_recues')
+@login_required
+def soumettre_bilan_entreprise(request, stage_id):
+    if request.user.role != 'ENTREPRISE':
+        return redirect('home')
+
+    from stages.models import StageActif
+    stage = get_object_or_404(StageActif, id=stage_id)
+    
+    if request.method == 'POST':
+        stage.note_assiduite = request.POST.get('note_assiduite', 0)
+        stage.note_technique = request.POST.get('note_technique', 0)
+        stage.note_integration = request.POST.get('note_integration', 0)
+        stage.feedback_entreprise = request.POST.get('feedback_entreprise', '').strip()
+        stage.save()
+        messages.success(request, "Bilan de fin de stage enregistré avec succès ! ⭐")
+        
     return redirect('candidatures_recues')

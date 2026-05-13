@@ -1,0 +1,473 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Espace Encadrant — TalentSync AI{% endblock %}
+
+{% block content %}
+
+<!-- Ambient blobs -->
+<div class="position-fixed w-100 h-100 top-0 start-0 overflow-hidden" style="z-index:-1;pointer-events:none;">
+    <div style="position:absolute;top:-5%;left:20%;width:50vw;height:50vw;background:linear-gradient(135deg,#7F00FF,#3b28cc);filter:blur(130px);opacity:0.06;border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-10%;right:5%;width:40vw;height:40vw;background:linear-gradient(135deg,#00f0ff,#3b28cc);filter:blur(110px);opacity:0.06;border-radius:50%;"></div>
+</div>
+
+<div class="py-5">
+<div class="container" style="max-width:1100px;">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-5 animate-fade-in">
+        <div>
+            <p class="text-muted small fw-semibold mb-1 text-uppercase" style="letter-spacing:1.2px;">
+                <i class="fas fa-chalkboard-teacher me-1" style="color:var(--primary-color);"></i>
+                Tableau de Bord — Encadrant Pédagogique
+            </p>
+            <h1 class="fw-bold mb-1" style="font-size:1.9rem;">
+                Suivi des <span class="text-gradient">Stages PFE</span>
+            </h1>
+            <p class="text-muted mb-0">Supervisez et évaluez vos stagiaires depuis cet espace dédié.</p>
+        </div>
+        <a href="{% url 'modifier_encadrant' %}" class="btn btn-outline-secondary btn-sm px-4 rounded-pill align-self-start align-self-md-center">
+            <i class="fas fa-user-edit me-2"></i>Mon profil
+        </a>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="mb-4 animate-fade-in">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 border-0 shadow-sm" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Stats -->
+    <div class="row g-3 mb-5 animate-fade-in delay-1">
+        <div class="col-sm-3">
+            <div class="card border-0 text-center py-4" style="border-radius:16px;background:rgba(59,40,204,0.05);border:1px solid rgba(59,40,204,0.12)!important;">
+                <div class="fw-black" style="font-size:2rem;color:var(--primary-color);font-family:'Outfit',sans-serif;">{{ nb_total }}</div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">Total affectés</p>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-0 text-center py-4" style="border-radius:16px;background:rgba(0,240,255,0.05);border:1px solid rgba(0,240,255,0.15)!important;">
+                <div class="fw-black" style="font-size:2rem;color:#0dcaf0;font-family:'Outfit',sans-serif;">{{ nb_en_cours }}</div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">En cours</p>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-0 text-center py-4" style="border-radius:16px;background:rgba(28,200,138,0.05);border:1px solid rgba(28,200,138,0.15)!important;">
+                <div class="fw-black" style="font-size:2rem;color:#1cc88a;font-family:'Outfit',sans-serif;">{{ nb_termines }}</div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">Terminés</p>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card border-0 text-center py-4" style="border-radius:16px;background:rgba(246,194,62,0.06);border:1px solid rgba(246,194,62,0.2)!important;">
+                <div class="fw-black" style="font-size:2rem;color:#e0a800;font-family:'Outfit',sans-serif;">{{ nb_sans_rapport }}</div>
+                <p class="text-muted small fw-semibold mb-0 mt-1">Sans rapport</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Mes Stages Affectés ── -->
+    <div class="card card-premium border-0 animate-fade-in delay-2 mb-4">
+        <div style="height:3px;background:linear-gradient(90deg,var(--primary-color),var(--accent-color));border-radius:20px 20px 0 0;"></div>
+        <div class="card-header border-0 d-flex align-items-center gap-2 px-4 pt-4 pb-3" style="background:transparent;">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-3" style="width:36px;height:36px;background:rgba(59,40,204,0.08);">
+                <i class="fas fa-users" style="color:var(--primary-color);font-size:.9rem;"></i>
+            </span>
+            <h6 class="mb-0 fw-bold">Mes Stagiaires Encadrés</h6>
+        </div>
+        <div class="card-body p-0">
+            {% if mes_stages %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="font-size:0.75rem;">
+                        <tr style="background:rgba(244,245,249,0.8);">
+                            <th class="py-3 px-4 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Stagiaire</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Offre / Entreprise</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Statut</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Rapport</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Feedback Entreprise</th>
+                            <th class="py-3 px-4 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stage in mes_stages %}
+                        <tr style="transition:background .2s;">
+                            <!-- Stagiaire -->
+                            <td class="py-4 px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center justify-content-center rounded-circle flex-shrink-0" style="width:40px;height:40px;background:linear-gradient(135deg,rgba(127,0,255,0.15),rgba(0,240,255,0.15));">
+                                        <i class="fas fa-user-graduate" style="color:var(--primary-color);font-size:.85rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold" style="font-size:.95rem;">
+                                            {{ stage.candidature.nom_stagiaire }} {{ stage.candidature.prenom_stagiaire }}
+                                        </div>
+                                        <div class="text-muted small">{{ stage.candidature.email }}</div>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Offre / Entreprise -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="fw-medium" style="font-size:.9rem;">{{ stage.candidature.offre.titre }}</div>
+                                <div class="text-muted small">
+                                    <i class="far fa-building me-1"></i>{{ stage.candidature.offre.entreprise.nom }}
+                                </div>
+                                <div class="text-muted small">
+                                    <i class="far fa-calendar-alt me-1"></i>
+                                    {{ stage.candidature.offre.date_debut }} → {{ stage.candidature.offre.date_fin }}
+                                </div>
+                            </td>
+
+                            <!-- Statut -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                {% if stage.statut == 'TERMINE' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:rgba(28,200,138,0.12);color:#0d9e6e;border:1px solid rgba(28,200,138,0.25);font-size:.8rem;">
+                                        <i class="fas fa-check-circle me-1"></i>Terminé
+                                    </span>
+                                {% elif stage.statut == 'ANNULE' %}
+                                    <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:rgba(231,74,59,0.10);color:#c0392b;border:1px solid rgba(231,74,59,0.2);font-size:.8rem;">
+                                        <i class="fas fa-ban me-1"></i>Annulé
+                                    </span>
+                                {% else %}
+                                    <div class="d-flex flex-column gap-1 align-items-start">
+                                        <span class="badge rounded-pill px-3 py-2 fw-semibold" style="background:rgba(0,240,255,0.10);color:#0099aa;border:1px solid rgba(0,240,255,0.25);font-size:.8rem;">
+                                            <i class="fas fa-spinner me-1"></i>En cours
+                                        </span>
+                                        {% if stage.sujet_valide %}
+                                        <span class="text-success fw-bold" style="font-size:0.7rem; margin-left: 8px;">
+                                            <i class="fas fa-check-double me-1"></i>Sujet validé
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </td>
+
+                            <!-- Rapport / Livrables -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                {% with livrables=stage.livrables.all %}
+                                {% if livrables %}
+                                <div class="d-flex flex-column gap-1">
+                                    {% for liv in livrables %}
+                                    <a href="{% url 'stages:telecharger_livrable' liv.id %}" class="btn btn-sm rounded-pill px-2 py-1 fw-semibold" style="background:rgba(59,40,204,0.08);color:var(--primary-color);border:1px solid rgba(59,40,204,0.15);font-size:.75rem;">
+                                        <i class="fas fa-download me-1"></i>{{ liv.get_type_doc_display }}
+                                        {% if liv.telecharge %}<i class="fas fa-check text-success ms-1"></i>{% endif %}
+                                    </a>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                    <span class="text-muted small fst-italic">Pas encore déposé</span>
+                                {% endif %}
+                                {% endwith %}
+                            </td>
+
+                            <!-- Feedback Entreprise -->
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                {% if stage.feedback_entreprise %}
+                                    <span class="d-inline-block text-truncate" style="max-width:160px;font-size:.85rem;" title="{{ stage.feedback_entreprise }}">
+                                        <i class="fas fa-comment-dots me-1" style="color:#1cc88a;"></i>{{ stage.feedback_entreprise }}
+                                    </span>
+                                {% else %}
+                                    <span class="text-muted small fst-italic">—</span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="d-flex flex-column gap-2">
+
+                                    <!-- Valider / Invalider le sujet -->
+                                    <a href="{% if stage.statut == 'TERMINE' %}#{% else %}{% url 'stages:valider_sujet' stage.id %}{% endif %}"
+                                       class="btn btn-sm rounded-pill px-3 py-1 fw-semibold {% if stage.statut == 'TERMINE' %}disabled opacity-50{% endif %}"
+                                       style="{% if stage.sujet_valide %}background:rgba(28,200,138,0.15);color:#0d9e6e;border:1px solid rgba(28,200,138,0.3);{% else %}background:rgba(246,194,62,0.12);color:#856404;border:1px solid rgba(246,194,62,0.3);{% endif %}font-size:.78rem;">
+                                        {% if stage.sujet_valide %}
+                                        <i class="fas fa-check-circle me-1"></i>Sujet validé
+                                        {% else %}
+                                        <i class="fas fa-hourglass-half me-1"></i>Valider sujet
+                                        {% endif %}
+                                    </a>
+
+                                    <!-- Évaluer -->
+                                    <button class="btn btn-sm rounded-pill px-3 py-1 fw-semibold {% if stage.statut == 'TERMINE' %}btn-light border text-muted{% else %}{% endif %}"
+                                        style="{% if stage.statut != 'TERMINE' %}background:linear-gradient(135deg,var(--primary-color),var(--accent-color));color:#fff;border:none;box-shadow:0 4px 12px rgba(59,40,204,0.2);{% endif %}font-size:.78rem;"
+                                        data-bs-toggle="modal" data-bs-target="#evalModal{{ stage.id }}"
+                                        {% if stage.statut == 'TERMINE' %}disabled{% endif %}>
+                                        <i class="fas fa-star me-1"></i>{% if stage.statut == 'TERMINE' %}Évalué{% else %}Évaluer{% endif %}
+                                    </button>
+
+                                    <!-- Contact Tuteur (Consultation) -->
+                                    <button class="btn btn-sm rounded-pill px-3 py-1 fw-semibold"
+                                        style="background:rgba(0,240,255,0.08);color:#007a8a;border:1px solid rgba(0,240,255,0.25);font-size:.78rem;"
+                                        data-bs-toggle="modal" data-bs-target="#tuteurModal{{ stage.id }}">
+                                        <i class="fas fa-id-card me-1"></i>Contact Tuteur
+                                    </button>
+
+                                    {% if stage.note_finale %}
+                                    <div class="text-muted" style="font-size:.75rem;">
+                                        <i class="fas fa-check me-1 text-success"></i>Note: {{ stage.note_finale }}/20
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+
+            {% else %}
+            <div class="text-center py-5 px-4">
+                <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-4" style="width:80px;height:80px;background:rgba(59,40,204,0.07);">
+                    <i class="fas fa-user-graduate fa-2x" style="color:var(--primary-color);opacity:.5;"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Aucun stage affecté</h5>
+                <p class="text-muted">Prenez en charge des stages depuis le tableau ci-dessous.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ── Stages Disponibles à Prendre en Charge ── -->
+    {% if stages_libres %}
+    <div class="card card-premium border-0 animate-fade-in delay-3">
+        <div style="height:3px;background:linear-gradient(90deg,#f6c23e,#e07b00);border-radius:20px 20px 0 0;"></div>
+        <div class="card-header border-0 d-flex align-items-center gap-2 px-4 pt-4 pb-3" style="background:transparent;">
+            <span class="d-inline-flex align-items-center justify-content-center rounded-3" style="width:36px;height:36px;background:rgba(246,194,62,0.10);">
+                <i class="fas fa-handshake" style="color:#e07b00;font-size:.9rem;"></i>
+            </span>
+            <div>
+                <h6 class="mb-0 fw-bold">Stages Disponibles</h6>
+                <p class="text-muted small mb-0">Ces stages acceptés n'ont pas encore d'encadrant. Cliquez sur "Prendre en charge" pour les superviser.</p>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead style="font-size:0.75rem;">
+                        <tr style="background:rgba(246,194,62,0.05);">
+                            <th class="py-3 px-4 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Stagiaire</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Offre</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Entreprise</th>
+                            <th class="py-3 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Durée</th>
+                            <th class="py-3 px-4 text-uppercase fw-semibold text-muted" style="letter-spacing:.8px;border:none;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stage in stages_libres %}
+                        <tr>
+                            <td class="py-3 px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <div class="fw-bold">{{ stage.candidature.nom_stagiaire }} {{ stage.candidature.prenom_stagiaire }}</div>
+                                <div class="text-muted small">{{ stage.candidature.email }}</div>
+                            </td>
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <span class="fw-medium" style="font-size:.9rem;">{{ stage.candidature.offre.titre }}</span>
+                            </td>
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <span class="text-muted" style="font-size:.9rem;">{{ stage.candidature.offre.entreprise.nom }}</span>
+                            </td>
+                            <td style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <span class="text-muted small">
+                                    {{ stage.candidature.offre.date_debut }} → {{ stage.candidature.offre.date_fin }}
+                                </span>
+                            </td>
+                            <td class="px-4" style="border-top:1px solid rgba(0,0,0,0.04);">
+                                <a href="{% url 'stages:prendre_en_charge' stage.id %}"
+                                   class="btn btn-sm rounded-pill px-3 py-1 fw-semibold"
+                                   style="background:rgba(246,194,62,0.15);color:#a07000;border:1px solid rgba(246,194,62,0.3);font-size:.8rem;">
+                                    <i class="fas fa-hand-pointer me-1"></i>Prendre en charge
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+</div>
+
+    <!-- Modals (Moved to end to fix stacking context issues) -->
+    {% if mes_stages %}
+    {% for stage in mes_stages %}
+        <!-- Tuteur Entreprise Modal -->
+        <div class="modal fade" id="tuteurModal{{ stage.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0" style="border-radius:20px;">
+                    <div style="height:4px;background:linear-gradient(90deg,#1cc88a,#00f0ff);border-radius:20px 20px 0 0;"></div>
+                    <div class="modal-header border-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold"><i class="fas fa-user-tie me-2 text-success"></i>Tuteur en Entreprise</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body px-4 pb-4">
+                        <p class="text-muted small mb-4">Voici les coordonnées du tuteur désigné par l'entreprise d'accueil pour ce stage.</p>
+                        
+                        {% if stage.tuteur_entreprise_nom %}
+                        <div class="mb-3">
+                            <label class="text-muted small fw-bold text-uppercase" style="letter-spacing:1px; font-size: 0.65rem;">Nom & Prénom</label>
+                            <div class="p-3 rounded-3 bg-light fw-bold text-dark">
+                                <i class="fas fa-user-circle me-2 text-success"></i>{{ stage.tuteur_entreprise_nom }}
+                            </div>
+                        </div>
+                        <div class="mb-0">
+                            <label class="text-muted small fw-bold text-uppercase" style="letter-spacing:1px; font-size: 0.65rem;">Email de contact</label>
+                            <div class="p-3 rounded-3 bg-light">
+                                <a href="mailto:{{ stage.tuteur_entreprise_email }}" class="text-decoration-none fw-medium text-primary">
+                                    <i class="fas fa-envelope me-2"></i>{{ stage.tuteur_entreprise_email|default:"Non renseigné" }}
+                                </a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="text-center py-4 bg-light rounded-3">
+                            <i class="fas fa-user-clock fa-2x mb-2 text-muted opacity-50"></i>
+                            <p class="text-muted small mb-0">L'entreprise n'a pas encore désigné de tuteur professionnel.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-secondary rounded-pill px-5 w-100" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evaluation Modal -->
+        <div class="modal fade" id="evalModal{{ stage.id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0" style="border-radius:20px;box-shadow:0 30px 60px rgba(0,0,0,0.15);">
+                    <div style="height:4px;background:linear-gradient(90deg,var(--primary-color),var(--accent-color));border-radius:20px 20px 0 0;"></div>
+                    <div class="modal-header border-0 px-4 pt-4">
+                        <h5 class="modal-title fw-bold">
+                            <i class="fas fa-star me-2" style="color:var(--primary-color);"></i>
+                            Évaluation — {{ stage.candidature.nom_stagiaire }} {{ stage.candidature.prenom_stagiaire }}
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    
+                    <form method="POST" action="{% url 'stages:soumettre_evaluation' stage.id %}">
+                        {% csrf_token %}
+                        <div class="modal-body px-4">
+                            <!-- Info stage -->
+                            <div class="p-3 mb-4 rounded-3" style="background:rgba(59,40,204,0.04);border:1px solid rgba(59,40,204,0.1);">
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing:.8px;">Offre</div>
+                                        <div class="fw-medium">{{ stage.candidature.offre.titre }}</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing:.8px;">Entreprise</div>
+                                        <div class="fw-medium">{{ stage.candidature.offre.entreprise.nom }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Section Bilan Entreprise -->
+                            {% if stage.feedback_entreprise or stage.note_assiduite > 0 %}
+                            <div class="p-3 rounded-4 mb-4" style="background:rgba(0,240,255,0.05); border:1px solid rgba(0,240,255,0.15);">
+                                <h6 class="fw-bold text-info small text-uppercase mb-3">
+                                    <i class="fas fa-building me-2"></i>Retour de l'Entreprise
+                                </h6>
+                                <div class="row g-2 mb-3">
+                                    <div class="col-4 text-center">
+                                        <div class="small text-muted" style="font-size:0.6rem;">Assiduité</div>
+                                        <div class="text-warning" style="font-size:0.75rem;">
+                                            {% for i in "12345" %}{% if forloop.counter <= stage.note_assiduite %}⭐{% endif %}{% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="small text-muted" style="font-size:0.6rem;">Technique</div>
+                                        <div class="text-warning" style="font-size:0.75rem;">
+                                            {% for i in "12345" %}{% if forloop.counter <= stage.note_technique %}⭐{% endif %}{% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <div class="small text-muted" style="font-size:0.6rem;">Intégration</div>
+                                        <div class="text-warning" style="font-size:0.75rem;">
+                                            {% for i in "12345" %}{% if forloop.counter <= stage.note_integration %}⭐{% endif %}{% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-2 rounded-3 small text-muted border-0 shadow-sm" style="font-style:italic; font-size:0.8rem;">
+                                    "{{ stage.feedback_entreprise|default:'Aucun commentaire laissé.' }}"
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-light border-0 small mb-4 py-2" style="background:rgba(0,0,0,0.02);">
+                                <i class="fas fa-info-circle me-2 text-muted"></i>L'entreprise n'a pas encore soumis son bilan.
+                            </div>
+                            {% endif %}
+
+                            <!-- Note finale -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.8px;">
+                                    <i class="fas fa-graduation-cap me-1"></i>Note finale (/20)
+                                </label>
+                                <input type="number" name="note_finale" min="0" max="20" step="0.25"
+                                    value="{{ stage.note_finale|default:'' }}"
+                                    class="form-control form-control-custom"
+                                    placeholder="Ex : 16.5">
+                            </div>
+
+                            <!-- Remarques -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.8px;">
+                                    <i class="fas fa-comment-alt me-1"></i>Remarques / Directives (visibles par l'étudiant)
+                                </label>
+                                <textarea name="remarques_encadrant" rows="3" class="form-control form-control-custom"
+                                    placeholder="Ex : Veuillez détailler la partie conception dans votre rapport final...">{{ stage.remarques_encadrant|default:'' }}</textarea>
+                            </div>
+
+                            <!-- Évaluation académique -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-muted small text-uppercase" style="letter-spacing:.8px;">
+                                    <i class="fas fa-star me-1"></i>Évaluation académique finale
+                                </label>
+                                <textarea name="evaluation_encadrant" rows="3" class="form-control form-control-custom"
+                                    placeholder="Appréciation globale du travail du stagiaire...">{{ stage.evaluation_encadrant|default:'' }}</textarea>
+                            </div>
+
+                            <!-- Switches -->
+                            <div class="form-check form-switch mb-3 p-3 rounded-3" style="background:rgba(28,200,138,0.05);border:1px solid rgba(28,200,138,0.15);">
+                                <input class="form-check-input" type="checkbox" role="switch" name="sujet_valide" id="sujetValide{{ stage.id }}"
+                                    {% if stage.sujet_valide %}checked{% endif %}>
+                                <label class="form-check-label fw-semibold" for="sujetValide{{ stage.id }}">
+                                    <i class="fas fa-check-circle me-1 text-success"></i>Valider le <strong>sujet</strong> pédagogiquement
+                                </label>
+                            </div>
+
+                            <div class="form-check form-switch p-3 rounded-3" style="background:rgba(59,40,204,0.05);border:1px solid rgba(59,40,204,0.15);">
+                                <input class="form-check-input" type="checkbox" role="switch" name="cloturer_stage" id="cloturerStage{{ stage.id }}"
+                                    {% if stage.statut == 'TERMINE' %}checked{% endif %}>
+                                <label class="form-check-label fw-bold" for="cloturerStage{{ stage.id }}" style="color:var(--primary-color);">
+                                    <i class="fas fa-flag-checkered me-1"></i>Clôturer définitivement ce stage
+                                </label>
+                                <div class="text-muted small mt-1" style="font-size:0.7rem;">
+                                    <i class="fas fa-info-circle me-1"></i>Cette action archivera le dossier et figera l'évaluation.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer border-0 px-4 pb-4">
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary-custom rounded-pill px-5">
+                                <i class="fas fa-save me-2"></i>Enregistrer & Clôturer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% endif %}
+
+{% endblock %}

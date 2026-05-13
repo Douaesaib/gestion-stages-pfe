@@ -84,13 +84,23 @@
                                 
                                 <td class="text-end px-4">
                                     <div class="btn-group" role="group">
-                                        <a href="{% url 'changer_statut' c.id 'ACCEPTEE' %}" class="btn btn-sm btn-success fw-bold {% if c.statut == 'ACCEPTEE' %}disabled{% endif %}">
+                                        <!-- Bouton Accepter (Ouvre la modale) -->
+                                        <button type="button" 
+                                                class="btn btn-sm btn-success fw-bold {% if c.statut == 'ACCEPTEE' %}disabled{% endif %}"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalAccepter{{ c.id }}">
                                             <i class="fas fa-check"></i> Accepter
-                                        </a>
+                                        </button>
 
                                         <a href="{% url 'changer_statut' c.id 'REFUSEE' %}" class="btn btn-sm btn-danger fw-bold {% if c.statut == 'REFUSEE' %}disabled{% endif %}">
                                             <i class="fas fa-times"></i> Refuser
                                         </a>
+                                        
+                                        {% if c.statut == 'ACCEPTEE' and c.stage_actif %}
+                                        <button type="button" class="btn btn-sm btn-info text-white fw-bold" data-bs-toggle="modal" data-bs-target="#modalBilan{{ c.id }}">
+                                            <i class="fas fa-clipboard-check"></i> Bilan de stage
+                                        </button>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>
@@ -141,4 +151,112 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+    {% if candidatures %}
+    {% for c in candidatures %}
+    <div class="modal fade" id="modalAccepter{{ c.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div style="height: 5px; background: linear-gradient(90deg, #1cc88a, #00f0ff); border-radius: 20px 20px 0 0;"></div>
+                <div class="modal-header border-0 px-4 pt-4">
+                    <h5 class="modal-title fw-bold"><i class="fas fa-user-check text-success me-2"></i>Confirmation d'acceptation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{% url 'changer_statut' c.id 'ACCEPTEE' %}">
+                    {% csrf_token %}
+                    <div class="modal-body px-4">
+                        <div class="alert alert-light border-0 small mb-4" style="background: rgba(28,200,138,0.05);">
+                            <i class="fas fa-info-circle text-success me-2"></i>
+                            Veuillez désigner le tuteur ou responsable opérationnel qui encadrera <strong>{{ c.nom_stagiaire }}</strong> au sein de votre structure.
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Nom et Prénom du tuteur *</label>
+                            <input type="text" name="tuteur_nom" class="form-control bg-light border-0 py-2 px-3" placeholder="Ex: M. Ahmed Benali" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Adresse E-mail professionnelle *</label>
+                            <input type="email" name="tuteur_email" class="form-control bg-light border-0 py-2 px-3" placeholder="tuteur@entreprise.com" required>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label small fw-bold text-muted text-uppercase" style="letter-spacing: 0.5px;">Poste occupé (Optionnel)</label>
+                            <input type="text" name="tuteur_poste" class="form-control bg-light border-0 py-2 px-3" placeholder="Ex: Tech Lead / Chef de projet">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm">
+                            <i class="fas fa-check-circle me-2"></i>Confirmer l'acceptation
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if c.statut == 'ACCEPTEE' and c.stage_actif %}
+    <!-- Modal Bilan de Fin de Stage (Entreprise) -->
+    <div class="modal fade" id="modalBilan{{ c.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div style="height: 5px; background: linear-gradient(90deg, #17a2b8, #00f0ff); border-radius: 20px 20px 0 0;"></div>
+                <div class="modal-header border-0 px-4 pt-4">
+                    <h5 class="modal-title fw-bold text-info"><i class="fas fa-medal me-2"></i>Bilan de fin de stage</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" action="{% url 'soumettre_bilan_entreprise' c.stage_actif.id %}">
+                    {% csrf_token %}
+                    <div class="modal-body px-4">
+                        <p class="text-muted small mb-4">Évaluez la performance globale de <strong>{{ c.nom_stagiaire }}</strong> durant sa période de stage.</p>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Assiduité et Ponctualité (/5)</label>
+                            <select name="note_assiduite" class="form-select bg-light border-0">
+                                <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                                <option value="4">⭐⭐⭐⭐ (Très bien)</option>
+                                <option value="3" selected>⭐⭐⭐ (Bien)</option>
+                                <option value="2">⭐⭐ (Moyen)</option>
+                                <option value="1">⭐ (Insuffisant)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Compétences techniques (/5)</label>
+                            <select name="note_technique" class="form-select bg-light border-0">
+                                <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                                <option value="4">⭐⭐⭐⭐ (Très bien)</option>
+                                <option value="3" selected>⭐⭐⭐ (Bien)</option>
+                                <option value="2">⭐⭐ (Moyen)</option>
+                                <option value="1">⭐ (Insuffisant)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Intégration et Travail d'équipe (/5)</label>
+                            <select name="note_integration" class="form-select bg-light border-0">
+                                <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                                <option value="4">⭐⭐⭐⭐ (Très bien)</option>
+                                <option value="3" selected>⭐⭐⭐ (Bien)</option>
+                                <option value="2">⭐⭐ (Moyen)</option>
+                                <option value="1">⭐ (Insuffisant)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label small fw-bold text-muted text-uppercase">Commentaire Global (Feedback)</label>
+                            <textarea name="feedback_entreprise" rows="3" class="form-control bg-light border-0" placeholder="Vos impressions sur le travail du stagiaire...">{{ c.stage_actif.feedback_entreprise|default:'' }}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 px-4 pb-4">
+                        <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-info text-white rounded-pill px-4 shadow-sm">
+                            <i class="fas fa-save me-2"></i>Enregistrer le bilan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+
 {% endblock %}
