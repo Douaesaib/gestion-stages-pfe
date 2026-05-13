@@ -12,4 +12,6 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='pages/password_reset_complete.html'), name='password_reset_complete'),
     path('candidatures-recues/', views.candidatures_recues, name='candidatures_recues'),
     path('candidature/<int:candidature_id>/statut/<str:nouveau_statut>/', views.changer_statut_candidature, name='changer_statut'),
+    path('encadrant/profil/', views.modifier_encadrant, name='modifier_encadrant'),
+    path('stage/<int:stage_id>/bilan/', views.soumettre_bilan_entreprise, name='soumettre_bilan_entreprise'),
 ]

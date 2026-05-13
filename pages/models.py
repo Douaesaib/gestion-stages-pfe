@@ -6,6 +6,7 @@ class User(AbstractUser):
         ('ADMIN', 'Admin'),
         ('ETUDIANT', 'Etudiant'),
         ('ENTREPRISE', 'Entreprise'),
+        ('ENCADRANT', 'Encadrant'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
@@ -22,7 +23,6 @@ class Etudiant(models.Model):
     cv_file = models.FileField(upload_to='cvs/', blank=True, null=True)
     
 
-
 class Entreprise(models.Model):
    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='entreprise')
    nom_societe = models.CharField(max_length=100)
@@ -33,4 +33,12 @@ class Entreprise(models.Model):
 
    def __str__(self):
         return self.nom_societe
-   
+
+class Encadrant(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='encadrant', limit_choices_to={'role': 'ENCADRANT'})
+    departement = models.CharField(max_length=100)
+    specialite = models.CharField(max_length=100)
+    telephone = models.CharField(max_length=20, blank=True)
+
+    def __str__(self):
+        return f"Pr. {self.user.last_name} {self.user.first_name}"

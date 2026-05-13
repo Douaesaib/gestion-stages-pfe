@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,34 +11,47 @@
     <link href="{% static 'css/premium_styles.css' %}" rel="stylesheet">
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light navbar-glass mb-4 sticky-top">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
-                <svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="animation: brand-svg-pulse 4s ease-in-out infinite; flex-shrink:0;">
+                <svg width="32" height="32" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true" style="animation: brand-svg-pulse 4s ease-in-out infinite; flex-shrink:0;">
                     <defs>
                         <linearGradient id="navLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#7F00FF;stop-opacity:1" />
                             <stop offset="100%" style="stop-color:#00F0FF;stop-opacity:1" />
                         </linearGradient>
                         <filter id="navLogoGlow">
-                            <feGaussianBlur stdDeviation="1.5" result="blur"/>
-                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            <feGaussianBlur stdDeviation="1.5" result="blur" />
+                            <feMerge>
+                                <feMergeNode in="blur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
                         </filter>
                     </defs>
-                    <circle cx="19" cy="19" r="16" stroke="url(#navLogoGradient)" stroke-width="2" stroke-dasharray="60 40" stroke-linecap="round" fill="none" filter="url(#navLogoGlow)"/>
-                    <circle cx="19" cy="19" r="5" fill="url(#navLogoGradient)" filter="url(#navLogoGlow)"/>
-                    <line x1="19" y1="3" x2="19" y2="14" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="19" y1="24" x2="19" y2="35" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="3" y1="19" x2="14" y2="19" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="24" y1="19" x2="35" y2="19" stroke="url(#navLogoGradient)" stroke-width="2" stroke-linecap="round"/>
-                    <circle cx="6.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
-                    <circle cx="31.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
-                    <circle cx="6.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
-                    <circle cx="31.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7"/>
+                    <circle cx="19" cy="19" r="16" stroke="url(#navLogoGradient)" stroke-width="2"
+                        stroke-dasharray="60 40" stroke-linecap="round" fill="none" filter="url(#navLogoGlow)" />
+                    <circle cx="19" cy="19" r="5" fill="url(#navLogoGradient)" filter="url(#navLogoGlow)" />
+                    <line x1="19" y1="3" x2="19" y2="14" stroke="url(#navLogoGradient)" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="19" y1="24" x2="19" y2="35" stroke="url(#navLogoGradient)" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="3" y1="19" x2="14" y2="19" stroke="url(#navLogoGradient)" stroke-width="2"
+                        stroke-linecap="round" />
+                    <line x1="24" y1="19" x2="35" y2="19" stroke="url(#navLogoGradient)" stroke-width="2"
+                        stroke-linecap="round" />
+                    <circle cx="6.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7" />
+                    <circle cx="31.5" cy="6.5" r="2" fill="url(#navLogoGradient)" opacity="0.7" />
+                    <circle cx="6.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7" />
+                    <circle cx="31.5" cy="31.5" r="2" fill="url(#navLogoGradient)" opacity="0.7" />
                 </svg>
-                <span style="font-family:'Outfit',sans-serif; font-weight:700; font-size:1.2rem; color:#1a0050; letter-spacing:-0.02em;">TalentSync <span style="background:linear-gradient(135deg,#7F00FF,#00c8ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:800;">AI</span></span>
+                <span
+                    style="font-family:'Outfit',sans-serif; font-weight:700; font-size:1.2rem; color:#1a0050; letter-spacing:-0.02em;">TalentSync
+                    <span
+                        style="background:linear-gradient(135deg,#7F00FF,#00c8ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-weight:800;">AI</span></span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -45,29 +59,39 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Accueil</a></li>
-                    
+
                     {% if user.role != 'ENTREPRISE' %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'stages:offres_list' %}">Offres</a></li>
                     {% endif %}
                     {% if user.is_authenticated %}
-                        {% if user.role == 'ADMIN' or user.is_staff %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'analytics:dashboard' %}"><i class="fas fa-chart-pie me-1 text-accent"></i> Dashboard Admin</a></li>
-                        {% elif user.role == 'ETUDIANT' %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'analytics:recommandations' %}"><i class="fas fa-magic me-1 text-warning"></i> Recommandations IA</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'modifier_profile' %}"><i class="fas fa-user-graduate me-1 text-accent"></i> Mon Espace</a></li>
-                        {% elif user.role == 'ENTREPRISE' %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'modifier_entreprise' %}"><i class="fas fa-building me-1 text-accent"></i> Espace Entreprise</a></li>
-                        {% endif %}
+                    {% if user.role == 'ADMIN' or user.is_staff %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'analytics:dashboard' %}"><i
+                                class="fas fa-chart-pie me-1 text-accent"></i> Dashboard Admin</a></li>
+                    {% elif user.role == 'ETUDIANT' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'analytics:recommandations' %}"><i
+                                class="fas fa-magic me-1 text-warning"></i> Recommandations IA</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'stages:mes_candidatures' %}"><i
+                                class="fas fa-tasks me-1 text-accent"></i> Mes Candidatures</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'modifier_profile' %}"><i
+                                class="fas fa-user-circle me-1 text-muted"></i> Profil</a></li>
+                    {% elif user.role == 'ENTREPRISE' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'modifier_entreprise' %}"><i
+                                class="fas fa-building me-1 text-accent"></i> Espace Entreprise</a></li>
+                    {% elif user.role == 'ENCADRANT' %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'stages:dashboard_encadrant' %}"><i
+                                class="fas fa-chalkboard-teacher me-1 text-accent"></i> Espace Encadrant</a></li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 <div class="d-flex ms-lg-3 mt-3 mt-lg-0">
                     {% if user.is_authenticated %}
-                        <form method="post" action="{% url 'logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger btn-sm px-4 rounded-pill">Déconnexion</button>
-                        </form>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                            class="btn btn-outline-danger btn-sm px-4 rounded-pill">Déconnexion</button>
+                    </form>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary-custom btn-sm px-4 rounded-pill">Connexion</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary-custom btn-sm px-4 rounded-pill">Connexion</a>
                     {% endif %}
                 </div>
             </div>
@@ -81,11 +105,13 @@
 
     <footer class="text-center mt-5 py-4 bg-white border-top">
         <div class="container">
-            <p class="text-muted mb-0 fw-medium">© 2026 Faculté des Sciences Tétouan - <span class="text-primary">Gestion Stages Premium</span></p>
+            <p class="text-muted mb-0 fw-medium">© 2026 Faculté des Sciences Tétouan - <span
+                    class="text-primary">Gestion Stages Premium</span></p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>

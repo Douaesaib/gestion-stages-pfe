@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Etudiant,Entreprise
+from .models import User, Etudiant, Entreprise, Encadrant
 
 class SignUpForm(UserCreationForm):
     role = forms.ChoiceField(choices=User.ROLE_CHOICES, required=True)
@@ -30,3 +30,13 @@ class EntrepriseProfileForm(forms.ModelForm):
     class Meta:
         model = Entreprise
         fields = ['nom_societe', 'secteur', 'ville', 'description', 'site_web']       
+
+class EncadrantProfileForm(forms.ModelForm):
+    class Meta:
+        model = Encadrant
+        fields = ['departement', 'specialite', 'telephone']
+        widgets = {
+            'departement': forms.TextInput(attrs={'class': 'form-control'}),
+            'specialite': forms.TextInput(attrs={'class': 'form-control'}),
+            'telephone': forms.TextInput(attrs={'class': 'form-control'}),
+        }
