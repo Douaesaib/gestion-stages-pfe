@@ -130,8 +130,14 @@ def changer_statut_candidature(request, candidature_id, nouveau_statut):
         if nouveau_statut == 'ACCEPTEE':
             # Récupérer les infos du tuteur depuis le POST (si présentes)
             tuteur_nom = request.POST.get('tuteur_nom')
-            tuteur_email = request.POST.get('tuteur_email')
+            tuteur_email = (request.POST.get('tuteur_email') or '').strip()
             tuteur_poste = request.POST.get('tuteur_poste')
+
+            if tuteur_email:
+                from stages.validators import is_valid_email
+                if not is_valid_email(tuteur_email):
+                    messages.error(request, "Veuillez saisir une adresse email valide pour le tuteur.")
+                    return redirect('candidatures_recues')
             
             from stages.views import auto_creer_stage_actif
             auto_creer_stage_actif(candidature, tuteur_nom, tuteur_email, tuteur_poste)
