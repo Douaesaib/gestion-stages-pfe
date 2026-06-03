@@ -91,7 +91,8 @@
                             class="btn btn-outline-danger btn-sm px-4 rounded-pill">Déconnexion</button>
                     </form>
                     {% else %}
-                    <a href="{% url 'login' %}" class="btn btn-primary-custom btn-sm px-4 rounded-pill">Connexion</a>
+                    <a href="{% url 'login' %}" class="btn btn-outline-custom btn-sm px-4 rounded-pill me-2">Connexion</a>
+                    <a href="{% url 'signup' %}" class="btn btn-primary-custom btn-sm px-4 rounded-pill">Inscription</a>
                     {% endif %}
                 </div>
             </div>

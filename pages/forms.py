@@ -9,6 +9,14 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = UserCreationForm.Meta.fields + ('role', 'email',)
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email:
+            from stages.validators import is_valid_email
+            if not is_valid_email(email):
+                raise forms.ValidationError("Veuillez saisir une adresse email valide.")
+        return email
+
 class EtudiantProfileForm(forms.ModelForm):
     class Meta:
         model = Etudiant
@@ -23,6 +31,14 @@ class EtudiantProfileForm(forms.ModelForm):
             'experiences': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Stages ou expériences passées'}),
             'cv_file': forms.FileInput(attrs={'class': 'form-control'}),
         }
+            
+    def clean_telephone(self):
+        telephone = self.cleaned_data.get('telephone')
+        if telephone:
+            from stages.validators import is_valid_phone
+            if not is_valid_phone(telephone):
+                raise forms.ValidationError("Numéro de téléphone invalide (ex: 06XXXXXXXX ou +2126XXXXXXXX).")
+        return telephone
             
         
 
@@ -40,3 +56,11 @@ class EncadrantProfileForm(forms.ModelForm):
             'specialite': forms.TextInput(attrs={'class': 'form-control'}),
             'telephone': forms.TextInput(attrs={'class': 'form-control'}),
         }
+
+    def clean_telephone(self):
+        telephone = self.cleaned_data.get('telephone')
+        if telephone:
+            from stages.validators import is_valid_phone
+            if not is_valid_phone(telephone):
+                raise forms.ValidationError("Numéro de téléphone invalide (ex: 06XXXXXXXX ou +2126XXXXXXXX).")
+        return telephone

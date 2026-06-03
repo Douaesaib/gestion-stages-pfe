@@ -133,8 +133,18 @@ def postuler(request, offre_id):
             messages.error(request, "Veuillez saisir votre email.")
             return render(request, "stages/postuler.html", {"offre": offre})
 
+        from .validators import is_valid_email
+        if not is_valid_email(email):
+            messages.error(request, "Veuillez saisir une adresse email valide.")
+            return render(request, "stages/postuler.html", {"offre": offre})
+
         if not telephone:
             messages.error(request, "Veuillez saisir votre téléphone.")
+            return render(request, "stages/postuler.html", {"offre": offre})
+
+        from .validators import is_valid_phone
+        if not is_valid_phone(telephone):
+            messages.error(request, "Veuillez saisir un numéro de téléphone valide (ex: 06XXXXXXXX ou +2126XXXXXXXX).")
             return render(request, "stages/postuler.html", {"offre": offre})
 
         if not cv:
@@ -582,8 +592,13 @@ def maj_tuteur_entreprise(request, stage_id):
     from .models import StageActif
     stage = get_object_or_404(StageActif, id=stage_id, encadrant__user=request.user)
     if request.method == 'POST':
+        tuteur_email = request.POST.get('tuteur_email', '').strip()
+        from .validators import is_valid_email
+        if tuteur_email and not is_valid_email(tuteur_email):
+            messages.error(request, "Veuillez saisir une adresse email valide pour le tuteur.")
+            return redirect('stages:dashboard_encadrant')
         stage.tuteur_entreprise_nom   = request.POST.get('tuteur_nom', '').strip()
-        stage.tuteur_entreprise_email = request.POST.get('tuteur_email', '').strip()
+        stage.tuteur_entreprise_email = tuteur_email
         stage.save(update_fields=['tuteur_entreprise_nom', 'tuteur_entreprise_email'])
         messages.success(request, "Coordonnées du tuteur entreprise mises à jour ✅")
     return redirect('stages:dashboard_encadrant')
